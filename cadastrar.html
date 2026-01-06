@@ -1460,6 +1460,20 @@ document.getElementById('form').addEventListener('submit', async (e) => {
   resetSelect(area, 'Escolha a área')
   resetSelect(assunto, 'Escolha o assunto')
 })
+
+const { data: { user } } = await supabaseClient.auth.getUser()
+
+const { data: perfil } = await supabaseClient
+  .from('users')
+  .select('role')
+  .eq('id', user.id)
+  .single()
+
+if (perfil.role !== 'admin') {
+  alert('Acesso restrito')
+  window.location.href = 'dashboard.html'
+}
+
 </script>
 
 
