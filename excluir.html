@@ -332,6 +332,27 @@ async function excluirQuestao(id) {
     document.getElementById('btnFiltrar').click()
   }
 }
+
+(async () => {
+  const { data: { user } } = await supabaseClient.auth.getUser();
+
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  const { data: perfil, error } = await supabaseClient
+    .from("users")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  if (error || !perfil || perfil.role !== "admin") {
+    alert("Acesso restrito");
+    window.location.href = "dashboard.html";
+  }
+})();
+
 </script>
 
 </body>

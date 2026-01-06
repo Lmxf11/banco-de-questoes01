@@ -190,8 +190,14 @@ option {
 ===================== */
 .actions {
   display: flex;
-  gap: 12px;
+  gap: 30px;            
+  margin-top: 24px;     
 }
+
+.actions button {
+  padding: 14px 18px;   
+}
+
 
 button {
   padding: 14px;
@@ -265,3 +271,4 @@ button:hover {
     0 18px 40px rgba(0,0,0,0.45),
     0 0 0 6px rgba(255,255,255,0.2);
 }
+

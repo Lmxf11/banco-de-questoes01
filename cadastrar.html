@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Cadastrar Questão</title>
 <link rel="icon" type="image/png" href="imagem.jpeg">
-<img src="imagem.jpeg" class="floating-logo" alt="Logo">
+<img src="imagem.jpeg" alt="Logo" class="floating-logo">
 
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1461,23 +1461,27 @@ document.getElementById('form').addEventListener('submit', async (e) => {
   resetSelect(assunto, 'Escolha o assunto')
 })
 
-const { data: { user } } = await supabaseClient.auth.getUser()
+(async () => {
+  const { data: { user } } = await supabaseClient.auth.getUser();
 
-const { data: perfil } = await supabaseClient
-  .from('users')
-  .select('role')
-  .eq('id', user.id)
-  .single()
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
 
-if (perfil.role !== 'admin') {
-  alert('Acesso restrito')
-  window.location.href = 'dashboard.html'
-}
+  const { data: perfil, error } = await supabaseClient
+    .from("users")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  if (error || !perfil || perfil.role !== "admin") {
+    alert("Acesso restrito");
+    window.location.href = "dashboard.html";
+  }
+})();
 
 </script>
-
-
-<img src="imagem.jpeg" alt="Logo" class="floating-logo">
 
 </body>
 </html>
