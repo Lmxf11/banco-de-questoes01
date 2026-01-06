@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Excluir Questões</title>
+  <link rel="icon" type="image/png" href="imagem.jpeg">
+  <img src="imagem.jpeg" class="floating-logo" alt="Logo">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: radial-gradient(
+    circle at top left,
+    #1e3a8a 0%,
+    #1e40af 35%,
+    #1d4ed8 70%,
+    #2563eb 100%
+  );
+
+  color: #e0e7ff;
+}
+
+.container {
+  width: 100%;
+  max-width: 600px;
+  padding: 36px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 26px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #e0e7ff;
+}
+
+.card {
+  background: linear-gradient(
+    160deg,
+    rgba(255,255,255,0.10),
+    rgba(255,255,255,0.04)
+  );
+
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,0.18);
+  padding: 24px;
+
+  backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 30px 60px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.25);
+
+  margin-bottom: 24px;
+}
+
+select {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.2);
+
+  background: rgba(255,255,255,0.12);
+  color: #e0e7ff;
+
+  font-size: 14px;
+
+  appearance: none;
+  cursor: pointer;
+
+  background-image:
+    linear-gradient(45deg, transparent 50%, #c7d2fe 50%),
+    linear-gradient(135deg, #c7d2fe 50%, transparent 50%);
+  background-position:
+    calc(100% - 22px) calc(50% - 4px),
+    calc(100% - 16px) calc(50% - 4px);
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+select:focus {
+  outline: none;
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96,165,250,0.35);
+  transform: translateY(-1px);
+}
+
+select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+button {
+  flex: 1;
+  padding: 14px;
+
+  border-radius: 16px;
+  border: none;
+
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px rgba(37,99,235,0.45);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button.secondary {
+  background: rgba(255,255,255,0.15);
+  color: #e0e7ff;
+}
+
+#lista .card p {
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+#lista button {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  box-shadow: 0 12px 24px rgba(220,38,38,0.45);
+}
+
+option {
+  background: #1e3a8a;
+  color: #e0e7ff;
+  font-weight: 500;
+}
+
+
+/* ===== LOGO FLUTUANTE ===== */
+.floating-logo {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+
+  width: 68px;
+  height: 68px;
+
+  border-radius: 50%;
+  object-fit: cover;
+
+  background: #fff;
+  padding: 4px;
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.35),
+    0 0 0 4px rgba(255,255,255,0.15);
+
+  z-index: 999;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* hover elegante */
+.floating-logo:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow:
+    0 18px 40px rgba(0,0,0,0.45),
+    0 0 0 6px rgba(255,255,255,0.2);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Excluir Questões</h1>
+
+  <div class="card">
+    <select id="materia">
+      <option value="">Escolha a matéria</option>
+      <option value="Matemática">Matemática</option>
+      <option value="Português">Português</option>
+    </select>
+
+    <select id="assunto" disabled>
+      <option value="">Escolha o assunto</option>
+    </select>
+
+    <div class="actions">
+      <button id="btnFiltrar">Buscar</button>
+      <button class="secondary" onclick="window.history.back()">Voltar</button>
+    </div>
+  </div>
+
+  <div id="lista"></div>
+
+</div>
+
+<script>
+
+const supabaseClient = supabase.createClient(
+  "https://jsmdszcfgvoczkyfzzvu.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzbWRzemNmZ3ZvY3preWZ6enZ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1NDA2MTgsImV4cCI6MjA4MjExNjYxOH0.jsVXgSowIbJJcginBJDliVTJIxY_77-rtsiuM_MbL20"
+)
+
+
+const materia = document.getElementById('materia')
+const assunto = document.getElementById('assunto')
+const lista = document.getElementById('lista')
+
+
+const materiasMap = {
+  "Matemática": [
+    "Polinômios",
+    "Produtos Notáveis",
+    "Frações",
+    "Porcentagem",
+    "Triângulos",
+    "Quadriláteros"
+  ],
+  "Português": [
+    "Ortografia",
+    "Concordância",
+    "Romantismo",
+    "Modernismo"
+  ]
+}
+
+
+materia.addEventListener('change', () => {
+  assunto.innerHTML = '<option value="">Escolha o assunto</option>'
+  assunto.disabled = true
+
+  if (!materia.value) return
+
+  assunto.disabled = false
+  materiasMap[materia.value].forEach(a => {
+    const opt = document.createElement('option')
+    opt.value = a
+    opt.textContent = a
+    assunto.appendChild(opt)
+  })
+})
+
+
+document.getElementById('btnFiltrar').addEventListener('click', async () => {
+  lista.innerHTML = '<div class="card">Carregando...</div>'
+
+  let query = supabaseClient
+    .from('questoes')
+    .select('id, enunciado, materia, assunto')
+
+  if (materia.value) query = query.eq('materia', materia.value)
+  if (assunto.value) query = query.eq('assunto', assunto.value)
+
+  const { data, error } = await query
+  lista.innerHTML = ''
+
+  if (error) {
+    lista.innerHTML = '<div class="card">Erro ao buscar questões</div>'
+    return
+  }
+
+  if (!data || data.length === 0) {
+    lista.innerHTML = '<div class="card">Nenhuma questão encontrada</div>'
+    return
+  }
+
+  data.forEach(q => {
+    const card = document.createElement('div')
+    card.className = 'card'
+
+    card.innerHTML = `
+      <p>
+        <strong>${q.materia} — ${q.assunto}</strong><br><br>
+        ${q.enunciado}
+      </p>
+      <button onclick="excluirQuestao('${q.id}')">Excluir</button>
+    `
+
+    lista.appendChild(card)
+  })
+})
+
+
+async function excluirQuestao(id) {
+  if (!confirm('Tem certeza que deseja excluir essa questão?')) return
+
+  const { error } = await supabaseClient
+    .from('questoes')
+    .delete()
+    .eq('id', id)
+
+  if (error) {
+    alert('Erro ao excluir')
+  } else {
+    alert('Questão excluída!')
+    document.getElementById('btnFiltrar').click()
+  }
+}
+</script>
+
+</body>
+</html>

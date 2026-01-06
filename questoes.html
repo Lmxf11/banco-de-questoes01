@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Questões</title>
+  <link rel="icon" type="image/png" href="imagem.jpeg">
+  <img src="imagem.jpeg" class="floating-logo" alt="Logo">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  
+<style>
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ===== FUNDO ===== */
+body {
+  margin: 0;
+  min-height: 100vh;
+
+  background: radial-gradient(
+    circle at top left,
+    #1e3a8a 0%,
+    #1e40af 35%,
+    #1d4ed8 70%,
+    #2563eb 100%
+  );
+
+  color: #e0e7ff;
+}
+
+/* ===== HEADER ===== */
+header {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(14px);
+
+  padding: 16px 32px;
+  font-size: 18px;
+  font-weight: 700;
+
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+/* ===== CONTAINER ===== */
+.pagina {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+/* ===== CARD QUESTÃO ===== */
+.questao-card {
+  background: linear-gradient(
+    160deg,
+    rgba(255,255,255,0.10),
+    rgba(255,255,255,0.04)
+  );
+
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,0.18);
+
+  padding: 28px;
+
+  backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 30px 60px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.25);
+}
+
+/* ===== META ===== */
+.meta {
+  font-size: 14px;
+  color: #c7d2fe;
+  margin-bottom: 10px;
+}
+
+/* ===== TÍTULO ===== */
+.titulo {
+  font-size: 22px;
+  font-weight: 700;
+  color: #eff6ff;
+  margin-bottom: 18px;
+}
+
+/* ===== ENUNCIADO ===== */
+.enunciado {
+  white-space: pre-wrap;
+  font-size: 16px;
+  line-height: 1.7;
+  margin-bottom: 26px;
+  color: #e0e7ff;
+}
+
+/* ===== ALTERNATIVAS ===== */
+.alternativas {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.alternativa {
+  display: flex;
+  gap: 14px;
+  padding: 14px 18px;
+
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.22);
+
+  background: rgba(255,255,255,0.12);
+  color: #e0e7ff;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.alternativa:hover {
+  background: rgba(255,255,255,0.18);
+  transform: translateY(-1px);
+}
+
+.letra {
+  font-weight: 800;
+  color: #93c5fd;
+  min-width: 20px;
+}
+
+/* ===== CORRETA / ERRADA ===== */
+.correta {
+  background: rgba(52,211,153,0.18);
+  border-color: #34d399;
+  box-shadow: 0 0 0 3px rgba(52,211,153,0.35);
+}
+
+.errada {
+  background: rgba(248,113,113,0.18);
+  border-color: #f87171;
+  box-shadow: 0 0 0 3px rgba(248,113,113,0.35);
+}
+
+/* ===== AÇÕES ===== */
+.acoes {
+  margin-top: 30px;
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+}
+
+/* ===== BOTÕES ===== */
+button {
+  padding: 14px 22px;
+  border-radius: 16px;
+  border: none;
+
+  font-weight: 700;
+  font-size: 14px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.btn-voltar {
+  background: rgba(255,255,255,0.18);
+  color: #e0e7ff;
+}
+
+.btn-voltar:hover {
+  transform: translateY(-2px);
+}
+
+.btn-proxima {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+}
+
+.btn-proxima:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px rgba(37,99,235,0.45);
+}
+
+.btn-proxima:disabled {
+  background: rgba(255,255,255,0.25);
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ===== LOGO FLUTUANTE ===== */
+.floating-logo {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+
+  width: 64px;
+  height: 64px;
+
+  border-radius: 50%;
+  object-fit: cover;
+
+  background: #fff;
+  padding: 4px;
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.35),
+    0 0 0 4px rgba(255,255,255,0.15);
+
+  z-index: 999;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.floating-logo:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow:
+    0 18px 40px rgba(0,0,0,0.45),
+    0 0 0 6px rgba(255,255,255,0.2);
+}
+</style>
+
+</head>
+
+<body>
+
+<header>Questões</header>
+
+<div class="pagina">
+  <div id="container"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabaseClient = supabase.createClient(
+  'https://jsmdszcfgvoczkyfzzvu.supabase.co',
+  'sb_publishable_rqDGnUB-2tHkU4cNz1kRSg_oYRssJLn'
+)
+
+const params = new URLSearchParams(window.location.search)
+const materia = params.get('materia')
+const area = params.get('area')
+const assunto = params.get('assunto')
+
+let questoes = []
+let indiceAtual = 0
+let respondeu = false
+
+const container = document.getElementById('container')
+
+async function carregarQuestoes() {
+  let query = supabaseClient.from('questoes').select('*')
+
+  if (materia) query = query.eq('materia', materia)
+  if (area) query = query.eq('area', area)
+  if (assunto) query = query.eq('assunto', assunto)
+
+  const { data, error } = await query
+
+  if (error || !data || data.length === 0) {
+    container.innerHTML = '<p>Nenhuma questão encontrada.</p>'
+    return
+  }
+
+  questoes = data
+  mostrarQuestao()
+}
+
+function mostrarQuestao() {
+  respondeu = false
+  const q = questoes[indiceAtual]
+
+  const alternativas = {
+    A: q.alternativa_a,
+    B: q.alternativa_b,
+    C: q.alternativa_c,
+    D: q.alternativa_d
+  }
+
+  container.innerHTML = `
+    <div class="questao-card">
+      <div class="meta">${q.materia} • ${q.area} • ${q.assunto}</div>
+      <div class="titulo">Questão ${indiceAtual + 1}</div>
+      <div class="enunciado">${q.enunciado}</div>
+
+      <div class="alternativas">
+        ${Object.entries(alternativas).map(([letra, texto]) => `
+          <div class="alternativa" onclick="responder('${letra}')">
+            <span class="letra">${letra}</span> ${texto}
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="acoes">
+        <button class="btn-voltar" onclick="history.back()">Voltar</button>
+        <button class="btn-proxima" id="btnProxima" disabled onclick="proxima()">Próxima</button>
+      </div>
+    </div>
+  `
+}
+
+async function registrarDesempenho(acertou) {
+  const { data: { user } } = await supabaseClient.auth.getUser()
+
+  if (!user) {
+    console.error('Usuário não autenticado')
+    return
+  }
+
+  const { error } = await supabaseClient
+    .from('desempenho')
+    .insert([{
+      user_id: user.id,
+      materia: questoes[indiceAtual].materia,
+      correta: acertou
+    }])
+
+  if (error) {
+    console.error('Erro ao salvar desempenho:', error.message)
+  }
+}
+
+
+async function responder(letra) {
+  if (respondeu) return
+  respondeu = true
+
+  const correta = questoes[indiceAtual].correta.toUpperCase()
+  const acertou = letra === correta
+
+  document.querySelectorAll('.alternativa').forEach(div => {
+    const l = div.querySelector('.letra').innerText
+    if (l === correta) div.classList.add('correta')
+    if (l === letra && l !== correta) div.classList.add('errada')
+  })
+
+  document.getElementById('btnProxima').disabled = false
+
+  await registrarDesempenho(acertou)
+}
+
+function proxima() {
+  indiceAtual++
+
+  if (indiceAtual >= questoes.length) {
+    container.innerHTML = '<p>Fim das questões.</p>'
+    return
+  }
+
+  mostrarQuestao()
+}
+
+carregarQuestoes()
+</script>
+
+</body>
+</html>
