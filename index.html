@@ -238,10 +238,11 @@ a:hover {
 const supabaseUrl = "https://jsmdszcfgvoczkyfzzvu.supabase.co"
 const supabaseKey = "sb_publishable_rqDGnUB-2tHkU4cNz1kRSg_oYRssJLn"
 
-const supabaseClient = window.supabase.createClient(
+const supabaseClient = supabase.createClient(
   supabaseUrl,
   supabaseKey
 )
+
 
 const form = document.getElementById("cadastro-form")
 const msg = document.getElementById("msg")
@@ -256,21 +257,23 @@ form.addEventListener("submit", async (e) => {
   const email = document.getElementById("email").value
   const password = document.getElementById("password").value
 
-  const { error } = await supabaseClient.auth.signUp({
-    email,
-    password,
-    options: {
-      data: { nome }
-    }
-  })
-
-  if (error) {
-    msg.style.color = "#f87171"
-    msg.innerText = error.message.includes("already")
-      ? "Este email já está cadastrado."
-      : "Erro ao criar conta."
-    return
+const { error } = await supabaseClient.auth.signUp({
+  email,
+  password,
+  options: {
+    data: { nome },
+    emailRedirectTo: "https://banco-de-questoes01.vercel.app/login.html"
   }
+})
+
+
+if (error) {
+  msg.style.color = "#f87171"
+  msg.innerText = error.message
+  console.log(error)
+  return
+}
+
 
   msg.style.color = "#4ade80"
   msg.innerText = "Conta criada! Indo pro login..."
