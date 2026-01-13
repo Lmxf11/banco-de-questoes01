@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Cadastrar Questão</title>
-<link rel="icon" type="image/png" href="imagem.jpeg">
-<img src="imagem.jpeg" alt="Logo" class="floating-logo">
 
+<link rel="icon" type="image/png" href="imagem.jpeg">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -16,16 +15,9 @@
   font-family: 'Inter', sans-serif;
 }
 
-/* ===== FUNDO ===== */
-* {
-  box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
-}
-
 body {
   margin: 0;
   min-height: 100vh;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -45,6 +37,7 @@ body {
   width: 100%;
   max-width: 600px;
   padding: 36px;
+  display: none;
 }
 
 h1 {
@@ -52,7 +45,6 @@ h1 {
   margin-bottom: 26px;
   font-size: 28px;
   font-weight: 700;
-  color: #e0e7ff;
 }
 
 .card {
@@ -61,1341 +53,162 @@ h1 {
     rgba(255,255,255,0.10),
     rgba(255,255,255,0.04)
   );
-
   border-radius: 22px;
   border: 1px solid rgba(255,255,255,0.18);
   padding: 24px;
-
   backdrop-filter: blur(14px);
-
-  box-shadow:
-    0 30px 60px rgba(0,0,0,0.35),
-    inset 0 1px 0 rgba(255,255,255,0.25);
-
-  margin-bottom: 24px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.35);
 }
 
-select {
-  width: 100%;
-  padding: 14px 16px;
-  margin-bottom: 16px;
-
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.2);
-
-  background: rgba(255,255,255,0.12);
-  color: #e0e7ff;
-
-  font-size: 14px;
-
-  appearance: none;
-  cursor: pointer;
-
-  background-image:
-    linear-gradient(45deg, transparent 50%, #c7d2fe 50%),
-    linear-gradient(135deg, #c7d2fe 50%, transparent 50%);
-  background-position:
-    calc(100% - 22px) calc(50% - 4px),
-    calc(100% - 16px) calc(50% - 4px);
-  background-size: 6px 6px;
-  background-repeat: no-repeat;
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.15s ease;
-}
-
-select:focus {
-  outline: none;
-  border-color: #60a5fa;
-  box-shadow: 0 0 0 3px rgba(96,165,250,0.35);
-  transform: translateY(-1px);
-}
-
-select:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.actions {
-  display: flex;
-  gap: 12px;
-}
-
-button {
-  flex: 1;
-  padding: 14px;
-
-  border-radius: 16px;
-  border: none;
-
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: #fff;
-
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
-}
-
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 32px rgba(37,99,235,0.45);
-}
-
-button:active {
-  transform: translateY(0);
-}
-
-button.secondary {
-  background: rgba(255,255,255,0.15);
-  color: #e0e7ff;
-}
-
-#lista .card p {
-  line-height: 1.5;
-  margin-bottom: 14px;
-}
-
-#lista button {
-  background: linear-gradient(135deg, #dc2626, #ef4444);
-  box-shadow: 0 12px 24px rgba(220,38,38,0.45);
-}
-
-option {
-  background: #1e3a8a;
-  color: #e0e7ff;
-  font-weight: 500;
-}
-
-input,
-select,
-textarea {
+input, textarea, select {
   width: 100%;
   padding: 14px 18px;
   margin-bottom: 16px;
 
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.25);
-
   background: rgba(255,255,255,0.12);
   color: #e0e7ff;
 
   font-size: 14px;
-  font-weight: 500;
-
   outline: none;
-
-  transition:
-    border-color 0.25s ease,
-    box-shadow 0.25s ease,
-    transform 0.15s ease,
-    background 0.25s ease;
 }
 
-/* placeholder */
 input::placeholder,
 textarea::placeholder {
   color: #c7d2fe;
 }
 
-/* hover sutil */
-input:hover,
-select:hover,
-textarea:hover {
-  background: rgba(255,255,255,0.16);
-}
-
-/* focus bonito */
 input:focus,
-select:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
   border-color: #60a5fa;
-
-  background: rgba(255,255,255,0.18);
-
-  box-shadow:
-    0 0 0 4px rgba(96,165,250,0.35),
-    0 12px 24px rgba(37,99,235,0.35);
-
-  transform: translateY(-1px);
+  box-shadow: 0 0 0 4px rgba(96,165,250,0.35);
 }
 
-/* textarea */
 textarea {
   resize: vertical;
   min-height: 90px;
 }
 
-/* =========================
-   SELECT CUSTOM (SETINHA)
-========================= */
 select {
   appearance: none;
   cursor: pointer;
-
   background-image:
     linear-gradient(45deg, transparent 50%, #c7d2fe 50%),
     linear-gradient(135deg, #c7d2fe 50%, transparent 50%);
   background-position:
-    calc(100% - 22px) calc(50% - 3px),
-    calc(100% - 16px) calc(50% - 3px);
-  background-size:
-    6px 6px,
-    6px 6px;
+    calc(100% - 22px) 50%,
+    calc(100% - 16px) 50%;
+  background-size: 6px 6px;
   background-repeat: no-repeat;
 }
 
-/* select desativado */
 select:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  background: rgba(255,255,255,0.08);
 }
 
-/* =========================
-   INPUT COM ERRO (OPCIONAL)
-========================= */
-input.error,
-select.error,
-textarea.error {
-  border-color: #f87171;
-  box-shadow: 0 0 0 4px rgba(248,113,113,0.35);
+button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-/* =========================
-   INPUT COM SUCESSO (OPCIONAL)
-========================= */
-input.success,
-select.success,
-textarea.success {
-  border-color: #34d399;
-  box-shadow: 0 0 0 4px rgba(52,211,153,0.35);
+.msg {
+  margin-top: 12px;
+  text-align: center;
+  font-weight: 600;
 }
 
-
-
-
-
-/* ===== LOGO FLUTUANTE ===== */
 .floating-logo {
   position: fixed;
   bottom: 24px;
   right: 24px;
-
   width: 68px;
   height: 68px;
-
   border-radius: 50%;
   object-fit: cover;
-
   background: #fff;
   padding: 4px;
-
-  box-shadow:
-    0 12px 30px rgba(0,0,0,0.35),
-    0 0 0 4px rgba(255,255,255,0.15);
-
-  z-index: 999;
-
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
 }
-
-/* hover elegante */
-.floating-logo:hover {
-  transform: translateY(-4px) scale(1.05);
-  box-shadow:
-    0 18px 40px rgba(0,0,0,0.45),
-    0 0 0 6px rgba(255,255,255,0.2);
-}
-
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<img src="imagem.jpeg" alt="Logo" class="floating-logo">
+
+<div class="container" id="app">
   <h1>Cadastrar Questão</h1>
 
-  <form id="form">
-    <select id="materia" required>
-      <option value="">Escolha a matéria</option>
-      <option value="Matemática">Matemática</option>
-      <option value="Português">Português</option>
-      <option value="Inglês">Inglês</option>
-      <option value="Física">Física</option>
-      <option value="Quimíca">Quimíca</option>
-      <option value="Biolôgia">Biolôgia</option>
-    </select>
+  <div class="card">
+    <form id="form">
 
-    <select id="area" required disabled>
-      <option value="">Escolha a área</option>
-    </select>
+      <select id="materia" required>
+        <option value="">Escolha a matéria</option>
+        <option value="Matemática">Matemática</option>
+        <option value="Português">Português</option>
+        <option value="Inglês">Inglês</option>
+        <option value="Física">Física</option>
+        <option value="Química">Química</option>
+        <option value="Biologia">Biologia</option>
+      </select>
 
-    <select id="assunto" required disabled>
-      <option value="">Escolha o assunto</option>
-    </select>
+      <select id="area" disabled>
+        <option value="">Escolha a área</option>
+      </select>
 
-    <textarea id="enunciado" placeholder="Enunciado da questão" required></textarea>
+      <select id="assunto" disabled>
+        <option value="">Escolha o assunto</option>
+      </select>
 
-    <input id="a" placeholder="Alternativa A" required>
-    <input id="b" placeholder="Alternativa B" required>
-    <input id="c" placeholder="Alternativa C" required>
-    <input id="d" placeholder="Alternativa D" required>
-    <input id="e" placeholder="Alternativa E" required>
+      <textarea id="enunciado" placeholder="Enunciado da questão" required></textarea>
 
-    <input id="correta" placeholder="Correta (A, B, C, D ou E)" maxlength="1" required>
+      <input id="a" placeholder="Alternativa A" required>
+      <input id="b" placeholder="Alternativa B" required>
+      <input id="c" placeholder="Alternativa C" required>
+      <input id="d" placeholder="Alternativa D" required>
+      <input id="e" placeholder="Alternativa E" required>
 
-    <button type="submit">Salvar questão</button>
-    <p class="msg" id="msg"></p>
-  </form>
+      <input id="correta" placeholder="Correta (A, B, C, D ou E)" maxlength="1" required>
+
+      <button type="submit">Salvar questão</button>
+      <div class="msg" id="msg"></div>
+
+    </form>
+  </div>
 </div>
 
 <script>
-const supabaseUrl = 'https://jsmdszcfgvoczkyfzzvu.supabase.co'
-const supabaseKey = 'sb_publishable_rqDGnUB-2tHkU4cNz1kRSg_oYRssJLn'
-const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey)
-
+const supabaseClient = supabase.createClient(
+  'https://jsmdszcfgvoczkyfzzvu.supabase.co',
+  'sb_publishable_rqDGnUB-2tHkU4cNz1kRSg_oYRssJLn'
+)
 
 const materia = document.getElementById('materia')
 const area = document.getElementById('area')
 const assunto = document.getElementById('assunto')
-
-
-const enunciado = document.getElementById('enunciado')
-const a = document.getElementById('a')
-const b = document.getElementById('b')
-const c = document.getElementById('c')
-const d = document.getElementById('d')
-const e = document.getElementById('e')
-const correta = document.getElementById('correta')
-
 const msg = document.getElementById('msg')
 
 const materiasMap = {
-  "Matemática": {
-    areas: [
-      "Aritmética",
-      "Álgebra",
-      "Geometria Plana",
-      "Geometria Espacial",
-      "Trigonometria",
-      "Geometria Analítica",
-      "Estatística",
-      "Probabilidade",
-      "Análise Combinatória"
-    ],
-    assuntos: {
-      "Aritmética": [
-        "Conjuntos numéricos",
-        "Números naturais",
-        "Números inteiros",
-        "Números racionais",
-        "Números irracionais",
-        "Números reais",
-        "Operações fundamentais",
-        "Propriedades das operações",
-        "Múltiplos e divisores",
-        "Critérios de divisibilidade",
-        "MMC",
-        "MDC",
-        "Frações próprias",
-        "Frações impróprias",
-        "Frações aparentes",
-        "Simplificação de frações",
-        "Comparação de frações",
-        "Operações com frações",
-        "Números decimais",
-        "Dízimas periódicas",
-        "Conversão fração–decimal",
-        "Razão",
-        "Proporção",
-        "Grandezas proporcionais",
-        "Grandezas diretamente proporcionais",
-        "Grandezas inversamente proporcionais",
-        "Divisão proporcional",
-        "Porcentagem",
-        "Aumento percentual",
-        "Desconto percentual",
-        "Porcentagem sucessiva",
-        "Juros simples",
-        "Problemas de porcentagem",
-        "Regra de três simples",
-        "Regra de três composta",
-        "Potenciação",
-        "Propriedades das potências",
-        "Radiciação",
-        "Racionalização",
-        "Notação científica",
-        "Ordem de grandeza",
-        "Problemas aritméticos"
-      ],
-      "Álgebra": [
-        "Expressões algébricas",
-        "Valor numérico",
-        "Monômios",
-        "Polinômios",
-        "Grau de polinômio",
-        "Operações com polinômios",
-        "Produtos notáveis",
-        "Quadrado da soma",
-        "Quadrado da diferença",
-        "Produto da soma pela diferença",
-        "Fatoração algébrica",
-        "Fator comum",
-        "Agrupamento",
-        "Trinômio do segundo grau",
-        "Diferença de quadrados",
-        "Equações do 1º grau",
-        "Problemas do 1º grau",
-        "Equações do 2º grau",
-        "Fórmula de Bhaskara",
-        "Natureza das raízes",
-        "Equações fracionárias",
-        "Equações literais",
-        "Inequações do 1º grau",
-        "Sistemas de equações",
-        "Sistema 2x2",
-        "Sistema 3x3",
-        "Problemas com sistemas",
-        "Função",
-        "Domínio e imagem",
-        "Função afim",
-        "Coeficiente angular",
-        "Coeficiente linear",
-        "Gráfico da função afim",
-        "Função quadrática",
-        "Concavidade",
-        "Vértice da parábola",
-        "Zeros da função",
-        "Gráfico da função quadrática"
-      ],
-      "Geometria Plana": [
-        "Conceitos primitivos",
-        "Ponto",
-        "Reta",
-        "Plano",
-        "Semirreta",
-        "Segmento de reta",
-        "Posições relativas",
-        "Ângulos",
-        "Classificação dos ângulos",
-        "Ângulos complementares",
-        "Ângulos suplementares",
-        "Ângulos opostos pelo vértice",
-        "Polígonos",
-        "Classificação dos polígonos",
-        "Perímetro",
-        "Triângulos",
-        "Classificação dos triângulos",
-        "Condição de existência",
-        "Soma dos ângulos internos",
-        "Ângulos externos",
-        "Congruência de triângulos",
-        "Semelhança de triângulos",
-        "Teorema de Tales",
-        "Quadriláteros",
-        "Paralelogramos",
-        "Retângulo",
-        "Quadrado",
-        "Losango",
-        "Trapézio",
-        "Circunferência",
-        "Raio",
-        "Diâmetro",
-        "Corda",
-        "Arco",
-        "Comprimento da circunferência",
-        "Área do círculo",
-        "Área de figuras planas",
-        "Área do triângulo",
-        "Área do retângulo",
-        "Área do trapézio",
-        "Área do losango"
-      ],
-      "Geometria Espacial": [
-        "Sólidos geométricos",
-        "Prismas",
-        "Pirâmides",
-        "Cilindro",
-        "Cone",
-        "Esfera",
-        "Elementos dos sólidos",
-        "Área lateral",
-        "Área total",
-        "Volume do prisma",
-        "Volume da pirâmide",
-        "Volume do cilindro",
-        "Volume do cone",
-        "Volume da esfera",
-        "Planificação dos sólidos"
-      ],
-      "Trigonometria": [
-        "Razões trigonométricas",
-        "Seno",
-        "Cosseno",
-        "Tangente",
-        "Triângulo retângulo",
-        "Hipotenusa",
-        "Cateto oposto",
-        "Cateto adjacente",
-        "Ângulos notáveis",
-        "Relações fundamentais",
-        "Problemas trigonométricos",
-        "Lei dos senos",
-        "Lei dos cossenos"
-      ],
-      "Geometria Analítica": [
-        "Plano cartesiano",
-        "Par ordenado",
-        "Distância entre dois pontos",
-        "Ponto médio",
-        "Coeficiente angular",
-        "Equação da reta",
-        "Posições relativas entre retas",
-        "Circunferência no plano"
-      ],
-      "Estatística": [
-        "Leitura de gráficos",
-        "Gráficos de colunas",
-        "Gráficos de barras",
-        "Gráficos de setores",
-        "Tabelas",
-        "Frequência absoluta",
-        "Frequência relativa",
-        "Média aritmética",
-        "Média ponderada",
-        "Moda",
-        "Mediana",
-        "Interpretação de dados"
-      ],
-      "Probabilidade": [
-        "Experimento aleatório",
-        "Espaço amostral",
-        "Evento",
-        "Probabilidade clássica",
-        "Probabilidade de eventos simples",
-        "Eventos complementares",
-        "Problemas de probabilidade"
-      ],
-      "Análise Combinatória": [
-        "Princípio fundamental da contagem",
-        "Arranjos simples",
-        "Permutações simples",
-        "Permutações com repetição",
-        "Combinações simples",
-        "Problemas de contagem"
-      ]
-    }
-  },
+  "Matemática": { areas: ["Aritmética","Álgebra","Geometria"], assuntos: { "Aritmética": ["Porcentagem","Regra de três"], "Álgebra": ["Equações"], "Geometria": ["Ângulos"] } },
+  "Português": { areas: ["Ortografia","Sintaxe"], assuntos: { "Ortografia": ["Acentuação"], "Sintaxe": ["Concordância"] } },
+  "Inglês": { areas: ["Grammar"], assuntos: { "Grammar": ["Verb to be"] } },
+  "Física": { areas: ["Cinemática"], assuntos: { "Cinemática": ["MRU"] } },
+  "Química": { areas: ["Química Geral"], assuntos: { "Química Geral": ["Átomo"] } },
+  "Biologia": { areas: ["Citologia"], assuntos: { "Citologia": ["Célula"] } }
+}
 
-
-  "Português": {
-    areas: [
-      "Fonética e Fonologia",
-      "Morfologia",
-      "Sintaxe",
-      "Semântica",
-      "Ortografia",
-      "Interpretação de Texto",
-      "Redação",
-      "Literatura"
-    ],
-    assuntos: {
-      "Fonética e Fonologia": [
-        "Fonema",
-        "Letra",
-        "Vogais",
-        "Consoantes",
-        "Semivogais",
-        "Encontros vocálicos",
-        "Ditongo",
-        "Tritongo",
-        "Hiato",
-        "Encontros consonantais",
-        "Dígrafos",
-        "Divisão silábica",
-        "Classificação silábica",
-        "Tonicidade",
-        "Oxítona",
-        "Paroxítona",
-        "Proparoxítona",
-        "Monossílabos tônicos",
-        "Monossílabos átonos"
-      ],
-      "Ortografia": [
-        "Alfabeto",
-        "Uso do H",
-        "Uso do X",
-        "Uso do CH",
-        "Uso do S",
-        "Uso do SS",
-        "Uso do SC",
-        "Uso do Ç",
-        "Uso do Z",
-        "Emprego do G",
-        "Emprego do J",
-        "Emprego do C",
-        "Emprego do QU",
-        "Emprego do GU",
-        "Acentuação gráfica",
-        "Regras gerais de acentuação",
-        "Acentuação das oxítonas",
-        "Acentuação das paroxítonas",
-        "Acentuação das proparoxítonas",
-        "Acentuação dos monossílabos",
-        "Acento diferencial",
-        "Uso do hífen",
-        "Nova ortografia"
-      ],
-      "Morfologia": [
-        "Classe de palavras",
-        "Substantivo",
-        "Classificação dos substantivos",
-        "Flexão do substantivo",
-        "Gênero",
-        "Número",
-        "Grau",
-        "Adjetivo",
-        "Classificação dos adjetivos",
-        "Flexão do adjetivo",
-        "Artigo",
-        "Numeral",
-        "Pronome",
-        "Pronomes pessoais",
-        "Pronomes possessivos",
-        "Pronomes demonstrativos",
-        "Pronomes relativos",
-        "Verbo",
-        "Radical",
-        "Tema",
-        "Desinências",
-        "Conjugação verbal",
-        "Tempos verbais",
-        "Modos verbais",
-        "Vozes verbais",
-        "Advérbio",
-        "Preposição",
-        "Conjunção",
-        "Interjeição"
-      ],
-      "Sintaxe": [
-        "Frase",
-        "Oração",
-        "Período",
-        "Sujeito",
-        "Predicado",
-        "Tipos de sujeito",
-        "Predicado verbal",
-        "Predicado nominal",
-        "Predicado verbo-nominal",
-        "Termos essenciais da oração",
-        "Termos integrantes",
-        "Termos acessórios",
-        "Objeto direto",
-        "Objeto indireto",
-        "Complemento nominal",
-        "Adjunto adnominal",
-        "Adjunto adverbial",
-        "Aposto",
-        "Vocativo",
-        "Período simples",
-        "Período composto",
-        "Orações coordenadas",
-        "Orações subordinadas",
-        "Concordância verbal",
-        "Concordância nominal",
-        "Regência verbal",
-        "Regência nominal",
-        "Crase",
-        "Colocação pronominal",
-        "Pontuação"
-      ],
-      "Semântica": [
-        "Significação das palavras",
-        "Sinônimos",
-        "Antônimos",
-        "Homônimos",
-        "Parônimos",
-        "Polissemia",
-        "Denotação",
-        "Conotação",
-        "Ambiguidade",
-        "Figuras de linguagem",
-        "Metáfora",
-        "Comparação",
-        "Metonímia",
-        "Hipérbole",
-        "Eufemismo",
-        "Ironia",
-        "Personificação"
-      ],
-      "Interpretação de Texto": [
-        "Compreensão textual",
-        "Ideia principal",
-        "Ideias secundárias",
-        "Tema",
-        "Inferência",
-        "Informações explícitas",
-        "Informações implícitas",
-        "Coesão textual",
-        "Coerência textual",
-        "Tipologia textual",
-        "Texto narrativo",
-        "Texto descritivo",
-        "Texto dissertativo",
-        "Gêneros textuais",
-        "Interpretação de charges",
-        "Interpretação de tirinhas",
-        "Interpretação de gráficos",
-        "Interpretação de textos verbais e não verbais"
-      ],
-      "Redação": [
-        "Parágrafo",
-        "Estrutura do parágrafo",
-        "Introdução",
-        "Desenvolvimento",
-        "Conclusão",
-        "Narrativa",
-        "Descrição",
-        "Dissertação",
-        "Coerência",
-        "Coesão",
-        "Reescrita de frases",
-        "Reescrita de textos",
-        "Correção gramatical"
-      ],
-      "Literatura": [
-        "Conceito de literatura",
-        "Gêneros literários",
-        "Texto literário",
-        "Texto não literário",
-        "Trovadorismo",
-        "Humanismo",
-        "Quinhentismo",
-        "Barroco",
-        "Arcadismo",
-        "Romantismo",
-        "Realismo",
-        "Naturalismo",
-        "Parnasianismo",
-        "Simbolismo",
-        "Pré-Modernismo",
-        "Modernismo",
-        "Literatura brasileira",
-        "Principais autores",
-        "Principais obras"
-      ]
-    }
-  },
-
-
-  "Inglês": {
-    areas: [
-      "Grammar",
-      "Vocabulary",
-      "Reading Comprehension",
-      "Writing",
-      "Interpretation"
-    ],
-    assuntos: {
-      "Grammar": [
-        "Verb to be",
-        "Subject pronouns",
-        "Object pronouns",
-        "Possessive adjectives",
-        "Possessive pronouns",
-        "Articles (a, an, the)",
-        "Definite and indefinite articles",
-        "Simple present",
-        "Present continuous",
-        "Simple past",
-        "Past continuous",
-        "Future will",
-        "Future going to",
-        "Modal verbs",
-        "Can and could",
-        "May and might",
-        "Must and have to",
-        "Imperative",
-        "There is / There are",
-        "Prepositions of time",
-        "Prepositions of place",
-        "Prepositions of movement",
-        "Plural of nouns",
-        "Countable and uncountable nouns",
-        "Some and any",
-        "Much and many",
-        "Comparative adjectives",
-        "Superlative adjectives",
-        "Adverbs of frequency",
-        "Question words (WH-questions)",
-        "Tag questions",
-        "Passive voice (basic)",
-        "Reported speech (introductory)",
-        "Conditional zero",
-        "Conditional first"
-      ],
-      "Vocabulary": [
-        "Alphabet",
-        "Numbers",
-        "Colors",
-        "Family",
-        "School",
-        "Subjects",
-        "Classroom objects",
-        "Daily routine",
-        "Time expressions",
-        "Food and drinks",
-        "Fruits",
-        "Vegetables",
-        "Sports",
-        "Health",
-        "Body parts",
-        "Clothes",
-        "Professions",
-        "Jobs",
-        "Transportation",
-        "Places in the city",
-        "House",
-        "Furniture",
-        "Weather",
-        "Seasons",
-        "Countries and nationalities",
-        "Feelings",
-        "Emotions",
-        "Hobbies",
-        "Technology",
-        "Internet vocabulary"
-      ],
-      "Reading Comprehension": [
-        "Text comprehension",
-        "Main idea",
-        "Supporting details",
-        "Explicit information",
-        "Implicit information",
-        "Context clues",
-        "False cognates",
-        "Text purpose",
-        "Inference",
-        "Skimming",
-        "Scanning",
-        "Interpretation of ads",
-        "Interpretation of comics",
-        "Interpretation of short texts",
-        "Interpretation of emails",
-        "Interpretation of notices"
-      ],
-      "Writing": [
-        "Sentence structure",
-        "Affirmative sentences",
-        "Negative sentences",
-        "Interrogative sentences",
-        "Short paragraphs",
-        "Simple texts",
-        "Personal description",
-        "Daily routine writing",
-        "Opinion sentences"
-      ],
-      "Interpretation": [
-        "Verbal language",
-        "Non-verbal language",
-        "Mixed texts",
-        "Images and symbols",
-        "Charts and tables",
-        "Short dialogues"
-      ]
-    }
-  },
-
-  "Física": {
-    areas: [
-      "Introdução à Física",
-      "Cinemática",
-      "Dinâmica",
-      "Trabalho e Energia",
-      "Gravitação",
-      "Estática",
-      "Hidrostática",
-      "Termologia",
-      "Óptica",
-      "Ondulatória",
-      "Eletricidade"
-    ],
-    assuntos: {
-      "Introdução à Física": [
-        "Grandezas físicas",
-        "Grandezas escalares",
-        "Grandezas vetoriais",
-        "Sistema Internacional de Unidades",
-        "Conversão de unidades",
-        "Notação científica",
-        "Ordem de grandeza",
-        "Algarismos significativos",
-        "Análise dimensional"
-      ],
-      "Cinemática": [
-        "Movimento e repouso",
-        "Referencial",
-        "Trajetória",
-        "Espaço",
-        "Deslocamento",
-        "Intervalo de tempo",
-        "Velocidade média",
-        "Velocidade instantânea",
-        "Aceleração média",
-        "Aceleração instantânea",
-        "Movimento uniforme",
-        "Função horária do espaço",
-        "Gráficos do MU",
-        "Movimento uniformemente variado",
-        "Função horária da velocidade",
-        "Função horária do espaço no MUV",
-        "Gráficos do MUV",
-        "Queda livre",
-        "Aceleração da gravidade",
-        "Lançamento vertical",
-        "Lançamento horizontal",
-        "Lançamento oblíquo",
-        "Movimento circular",
-        "Velocidade angular",
-        "Período",
-        "Frequência",
-        "Aceleração centrípeta"
-      ],
-      "Dinâmica": [
-        "Força",
-        "Massa",
-        "Peso",
-        "Leis de Newton",
-        "Primeira lei de Newton",
-        "Segunda lei de Newton",
-        "Terceira lei de Newton",
-        "Força normal",
-        "Força de atrito",
-        "Atrito estático",
-        "Atrito dinâmico",
-        "Plano inclinado",
-        "Diagramas de forças",
-        "Força resultante",
-        "Aplicações das leis de Newton"
-      ],
-      "Trabalho e Energia": [
-        "Trabalho de uma força",
-        "Trabalho motor",
-        "Trabalho resistente",
-        "Energia",
-        "Energia cinética",
-        "Energia potencial gravitacional",
-        "Energia potencial elástica",
-        "Teorema da energia cinética",
-        "Conservação da energia",
-        "Potência",
-        "Rendimento"
-      ],
-      "Gravitação": [
-        "Lei da gravitação universal",
-        "Campo gravitacional",
-        "Peso",
-        "Variação da gravidade",
-        "Movimento dos planetas",
-        "Leis de Kepler"
-      ],
-      "Estática": [
-        "Equilíbrio dos corpos",
-        "Forças concorrentes",
-        "Forças paralelas",
-        "Momento de uma força",
-        "Torque",
-        "Condições de equilíbrio",
-        "Alavancas",
-        "Centro de massa"
-      ],
-      "Hidrostática": [
-        "Densidade",
-        "Pressão",
-        "Pressão atmosférica",
-        "Pressão hidrostática",
-        "Teorema de Stevin",
-        "Princípio de Pascal",
-        "Princípio de Arquimedes",
-        "Empuxo",
-        "Corpos flutuantes"
-      ],
-      "Termologia": [
-        "Temperatura",
-        "Escalas termométricas",
-        "Conversão de escalas",
-        "Calor",
-        "Calor sensível",
-        "Calor latente",
-        "Mudanças de estado físico",
-        "Dilatação térmica",
-        "Capacidade térmica",
-        "Calor específico",
-        "Propagação do calor"
-      ],
-      "Óptica": [
-        "Luz",
-        "Fontes luminosas",
-        "Propagação da luz",
-        "Reflexão da luz",
-        "Espelhos planos",
-        "Espelhos esféricos",
-        "Refração da luz",
-        "Índice de refração",
-        "Lentes convergentes",
-        "Lentes divergentes",
-        "Instrumentos ópticos"
-      ],
-      "Ondulatória": [
-        "Ondas",
-        "Classificação das ondas",
-        "Ondas mecânicas",
-        "Ondas eletromagnéticas",
-        "Comprimento de onda",
-        "Frequência",
-        "Período",
-        "Velocidade de propagação",
-        "Reflexão de ondas",
-        "Refração de ondas",
-        "Difração",
-        "Interferência",
-        "Som",
-        "Altura",
-        "Intensidade",
-        "Timbre"
-      ],
-      "Eletricidade": [
-        "Carga elétrica",
-        "Processos de eletrização",
-        "Corrente elétrica",
-        "Tensão elétrica",
-        "Resistência elétrica",
-        "Lei de Ohm",
-        "Associação de resistores",
-        "Potência elétrica",
-        "Energia elétrica",
-        "Consumo de energia elétrica"
-      ]
-    }
-  },
-
-  "Química": {
-    areas: [
-      "Introdução à Química",
-      "Química Geral",
-      "Química Inorgânica",
-      "Físico-Química",
-      "Química Orgânica",
-      "Química Ambiental"
-    ],
-    assuntos: {
-      "Introdução à Química": [
-        "Conceito de Química",
-        "Matéria",
-        "Energia",
-        "Propriedades da matéria",
-        "Propriedades gerais",
-        "Propriedades específicas",
-        "Estados físicos da matéria",
-        "Mudanças de estado físico",
-        "Fenômenos físicos",
-        "Fenômenos químicos"
-      ],
-      "Química Geral": [
-        "Substâncias puras",
-        "Misturas",
-        "Misturas homogêneas",
-        "Misturas heterogêneas",
-        "Sistemas homogêneos",
-        "Sistemas heterogêneos",
-        "Separação de misturas",
-        "Filtração",
-        "Decantação",
-        "Destilação simples",
-        "Destilação fracionada",
-        "Centrifugação",
-        "Cromatografia",
-        "Átomo",
-        "Modelos atômicos",
-        "Modelo de Dalton",
-        "Modelo de Thomson",
-        "Modelo de Rutherford",
-        "Modelo de Bohr",
-        "Número atômico",
-        "Número de massa",
-        "Isótopos",
-        "Isóbaros",
-        "Isótonos",
-        "Íons",
-        "Cátions",
-        "Ânions",
-        "Distribuição eletrônica",
-        "Camadas eletrônicas",
-        "Tabela periódica",
-        "Classificação dos elementos",
-        "Metais",
-        "Ametais",
-        "Gases nobres",
-        "Famílias e períodos"
-      ],
-      "Química Inorgânica": [
-        "Ligações químicas",
-        "Ligação iônica",
-        "Ligação covalente",
-        "Ligação metálica",
-        "Polaridade das ligações",
-        "Polaridade das moléculas",
-        "Fórmulas químicas",
-        "Balanceamento de equações",
-        "Reações químicas",
-        "Classificação das reações",
-        "Síntese",
-        "Análise",
-        "Simples troca",
-        "Dupla troca",
-        "Óxidos",
-        "Óxidos ácidos",
-        "Óxidos básicos",
-        "Óxidos anfóteros",
-        "Óxidos neutros",
-        "Ácidos",
-        "Classificação dos ácidos",
-        "Hidrácidos",
-        "Oxiácidos",
-        "Bases",
-        "Classificação das bases",
-        "Sais",
-        "Classificação dos sais",
-        "Nomenclatura inorgânica",
-        "Força dos ácidos e bases",
-        "Escala de pH"
-      ],
-      "Físico-Química": [
-        "Transformações químicas",
-        "Equações químicas",
-        "Balanceamento",
-        "Leis ponderais",
-        "Lei de Lavoisier",
-        "Lei de Proust",
-        "Estequiometria",
-        "Cálculo com mol",
-        "Massa molar",
-        "Volume molar",
-        "Densidade",
-        "Soluções",
-        "Concentração comum",
-        "Concentração em massa",
-        "Diluição",
-        "Mistura de soluções",
-        "Termoquímica",
-        "Reações exotérmicas",
-        "Reações endotérmicas",
-        "Velocidade das reações",
-        "Fatores da cinética química"
-      ],
-      "Química Orgânica": [
-        "Carbono",
-        "Hibridação do carbono",
-        "Cadeias carbônicas",
-        "Classificação das cadeias",
-        "Hidrocarbonetos",
-        "Alcanos",
-        "Alcenos",
-        "Alcinos",
-        "Aromáticos",
-        "Funções orgânicas",
-        "Álcoois",
-        "Fenóis",
-        "Aldeídos",
-        "Cetonas",
-        "Ácidos carboxílicos",
-        "Ésteres",
-        "Aminas",
-        "Amidas",
-        "Nomenclatura orgânica",
-        "Isomeria plana",
-        "Isomeria espacial",
-        "Reações orgânicas"
-      ],
-      "Química Ambiental": [
-        "Poluição do ar",
-        "Poluição da água",
-        "Poluição do solo",
-        "Chuva ácida",
-        "Efeito estufa",
-        "Aquecimento global",
-        "Camada de ozônio",
-        "Tratamento da água",
-        "Tratamento do lixo",
-        "Sustentabilidade"
-      ]
-    }
-  },
-
-  "Biologia": {
-    areas: [
-      "Introdução à Biologia",
-      "Citologia",
-      "Bioquímica",
-      "Genética",
-      "Ecologia",
-      "Fisiologia Humana",
-      "Botânica",
-      "Zoologia",
-      "Evolução"
-    ],
-    assuntos: {
-      "Introdução à Biologia": [
-        "Conceito de vida",
-        "Níveis de organização",
-        "Método científico",
-        "Características dos seres vivos",
-        "Origem da vida",
-        "Hipóteses sobre a vida"
-      ],
-      "Citologia": [
-        "Célula",
-        "Célula procarionte",
-        "Célula eucarionte",
-        "Membrana plasmática",
-        "Permeabilidade seletiva",
-        "Difusão",
-        "Osmose",
-        "Citoplasma",
-        "Organelas celulares",
-        "Mitocôndria",
-        "Ribossomos",
-        "Retículo endoplasmático",
-        "Complexo de Golgi",
-        "Lisossomos",
-        "Centríolos",
-        "Núcleo",
-        "Cromatina",
-        "Cromossomos",
-        "Ciclo celular",
-        "Mitose",
-        "Meiose"
-      ],
-      "Bioquímica": [
-        "Água",
-        "Sais minerais",
-        "Carboidratos",
-        "Lipídios",
-        "Proteínas",
-        "Vitaminas",
-        "Enzimas",
-        "Metabolismo",
-        "Anabolismo",
-        "Catabolismo"
-      ],
-      "Genética": [
-        "DNA",
-        "RNA",
-        "Código genético",
-        "Genes",
-        "Cromossomos",
-        "Genótipo",
-        "Fenótipo",
-        "Primeira lei de Mendel",
-        "Segunda lei de Mendel",
-        "Cruzamentos genéticos",
-        "Probabilidade",
-        "Hereditariedade",
-        "Mutação",
-        "Herança ligada ao sexo"
-      ],
-      "Ecologia": [
-        "Ecologia",
-        "Ecossistema",
-        "Cadeia alimentar",
-        "Teia alimentar",
-        "Níveis tróficos",
-        "Produtores",
-        "Consumidores",
-        "Decompositores",
-        "Fluxo de energia",
-        "Ciclos biogeoquímicos",
-        "Ciclo da água",
-        "Ciclo do carbono",
-        "Ciclo do nitrogênio",
-        "População",
-        "Comunidade",
-        "Biomas",
-        "Impactos ambientais",
-        "Preservação ambiental"
-      ],
-      "Fisiologia Humana": [
-        "Sistema digestório",
-        "Sistema respiratório",
-        "Sistema circulatório",
-        "Sistema excretor",
-        "Sistema nervoso",
-        "Sistema endócrino",
-        "Sistema locomotor",
-        "Sistema imunológico",
-        "Sistema reprodutor",
-        "Saúde humana"
-      ],
-      "Botânica": [
-        "Plantas",
-        "Briófitas",
-        "Pteridófitas",
-        "Gimnospermas",
-        "Angiospermas",
-        "Raiz",
-        "Caule",
-        "Folha",
-        "Flor",
-        "Fruto",
-        "Semente",
-        "Fotossíntese",
-        "Respiração vegetal",
-        "Transpiração"
-      ],
-      "Zoologia": [
-        "Animais",
-        "Invertebrados",
-        "Poríferos",
-        "Cnidários",
-        "Platelmintos",
-        "Nematelmintos",
-        "Anelídeos",
-        "Moluscos",
-        "Artrópodes",
-        "Equinodermos",
-        "Vertebrados",
-        "Peixes",
-        "Anfíbios",
-        "Répteis",
-        "Aves",
-        "Mamíferos"
-      ],
-      "Evolução": [
-        "Evolucionismo",
-        "Fixismo",
-        "Lamarckismo",
-        "Darwinismo",
-        "Seleção natural",
-        "Adaptação",
-        "Especiação",
-        "Evidências da evolução"
-      ]
-    }
-  }
-};
-
-
-function resetSelect(select, text) {
-  select.innerHTML = `<option value="">${text}</option>`
-  select.disabled = true
+function resetSelect(sel, text) {
+  sel.innerHTML = `<option value="">${text}</option>`
+  sel.disabled = true
 }
 
 materia.addEventListener('change', () => {
@@ -1406,51 +219,46 @@ materia.addEventListener('change', () => {
 
   area.disabled = false
   materiasMap[materia.value].areas.forEach(a => {
-    const opt = document.createElement('option')
-    opt.value = a
-    opt.textContent = a
-    area.appendChild(opt)
+    area.innerHTML += `<option value="${a}">${a}</option>`
   })
 })
 
 area.addEventListener('change', () => {
   resetSelect(assunto, 'Escolha o assunto')
-
   if (!area.value) return
 
   assunto.disabled = false
   materiasMap[materia.value].assuntos[area.value].forEach(a => {
-    const opt = document.createElement('option')
-    opt.value = a
-    opt.textContent = a
-    assunto.appendChild(opt)
+    assunto.innerHTML += `<option value="${a}">${a}</option>`
   })
 })
 
-document.getElementById('form').addEventListener('submit', async (e) => {
+document.getElementById('form').addEventListener('submit', async e => {
   e.preventDefault()
 
-  msg.style.color = '#ef4444'
-  msg.innerText = ''
+  const correta = document.getElementById('correta').value.toUpperCase()
+  if (!['A','B','C','D','E'].includes(correta)) {
+    msg.style.color = '#ef4444'
+    msg.innerText = 'A alternativa correta deve ser A, B, C, D ou E.'
+    return
+  }
 
-  const { error } = await supabaseClient
-    .from('questoes')
-    .insert({
-      materia: materia.value,
-      area: area.value,
-      assunto: assunto.value,
-      enunciado: enunciado.value,
-      alternativa_a: a.value,
-      alternativa_b: b.value,
-      alternativa_c: c.value,
-      alternativa_d: d.value,
-      alternativa_e: e.value, 
-      correta: correta.value.toUpperCase()
-    })
+  const { error } = await supabaseClient.from('questoes').insert({
+    materia: materia.value,
+    area: area.value,
+    assunto: assunto.value,
+    enunciado: enunciado.value,
+    alternativa_a: a.value,
+    alternativa_b: b.value,
+    alternativa_c: c.value,
+    alternativa_d: d.value,
+    alternativa_e: e.value,
+    correta
+  })
 
   if (error) {
+    msg.style.color = '#ef4444'
     msg.innerText = 'Erro ao salvar questão.'
-    console.error(error)
     return
   }
 
@@ -1461,26 +269,15 @@ document.getElementById('form').addEventListener('submit', async (e) => {
   resetSelect(assunto, 'Escolha o assunto')
 })
 
-(async () => {
-  const { data: { user } } = await supabaseClient.auth.getUser();
+;(async () => {
+  const { data: { user } } = await supabaseClient.auth.getUser()
+  if (!user) return location.href = 'login.html'
 
-  if (!user) {
-    window.location.href = "login.html";
-    return;
-  }
+  const { data } = await supabaseClient.from('users').select('role').eq('id', user.id).single()
+  if (!data || data.role !== 'admin') return location.href = 'dashboard.html'
 
-  const { data: perfil, error } = await supabaseClient
-    .from("users")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  if (error || !perfil || perfil.role !== "admin") {
-    alert("Acesso restrito");
-    window.location.href = "dashboard.html";
-  }
-})();
-
+  document.getElementById('app').style.display = 'block'
+})()
 </script>
 
 </body>

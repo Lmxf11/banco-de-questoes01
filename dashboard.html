@@ -244,34 +244,62 @@ td {
     0 0 0 6px rgba(255,255,255,0.2);
 }
 
+
+aside a svg {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  flex-shrink: 0;
+  transform: none !important;
+}
+
 </style>
 </head>
 
 <body>
+  
+<img src="imagem.jpeg" class="floating-logo" alt="Logo">
 
 <div class="layout">
 
-  <aside>
-    <h2>
-      <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 3L1 9l11 6 9-4.91V17h2V9"/></svg>
-      <span class="text">Mesa de Estudos</span>
-    </h2>
+<aside>
+  <h2>
+    <svg viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 3L1 9l11 6 9-4.91V17h2V9" />
+    </svg>
+    <span class="text">Mesa de Estudos</span>
+  </h2>
 
-    <a href="#" class="active">
-      <svg viewBox="0 0 24 24"><path fill="currentColor" d="M3.5 18.49l6-6.01 4 4L22 6.92"/></svg>
-      <span class="text">Meu desempenho</span>
-    </a>
+  <a href="#" class="active">
+    <svg viewBox="0 0 24 24">
+      <path fill="currentColor" d="M3.5 18.49l6-6.01 4 4L22 6.92" />
+    </svg>
+    <span class="text">Meu desempenho</span>
+  </a>
 
-    <a href="filtrar.html">
-      <svg viewBox="0 0 24 24"><path fill="currentColor" d="M18 2H6v16h12"/></svg>
-      <span class="text">Resolver questões</span>
-    </a>
+  <a href="filtrar.html">
+    <svg viewBox="0 0 24 24">
+      <path fill="currentColor" d="M18 2H6v16h12" />
+    </svg>
+    <span class="text">Resolver questões</span>
+  </a>
 
-    <a href="cadastrar.html" id="btnCadastrar" class="admin-only">
-      <svg viewBox="0 0 24 24"><path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2"/></svg>
-      <span class="text">Cadastrar</span>
-    </a>
-  </aside>
+  <a href="materiais.html">
+    <svg viewBox="0 0 24 24">
+      <path fill="currentColor" d="M18 2H6v16h12" />
+    </svg>
+    <span class="text">Materiais</span>
+  </a>
+
+  <a href="cadastrar.html" id="btnCadastrar" class="admin-only">
+    <svg viewBox="0 0 24 24">
+      <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2" />
+    </svg>
+    <span class="text">Cadastrar</span>
+  </a>
+</aside>
+
 
   <main>
     <h1>Meu Desempenho</h1>
