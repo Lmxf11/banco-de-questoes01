@@ -1266,7 +1266,10 @@ materia.addEventListener('change', () => {
   if (!materia.value) return
 
   assunto.disabled = false
-  materiasMap[materia.value].forEach(a => {
+
+  const assuntosObj = materiasMap[materia.value].assuntos
+
+  Object.values(assuntosObj).flat().forEach(a => {
     const opt = document.createElement('option')
     opt.value = a
     opt.textContent = a
@@ -1345,5 +1348,6 @@ async function excluirQuestao(id) {
 
 </body>
 </html>
+
 
 
