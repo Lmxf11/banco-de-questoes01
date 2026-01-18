@@ -269,16 +269,8 @@ document.getElementById('form').addEventListener('submit', async e => {
   resetSelect(assunto, 'Escolha o assunto')
 })
 
-;(async () => {
-  const { data: { user } } = await supabaseClient.auth.getUser()
-  if (!user) return location.href = 'login.html'
-
-  const { data } = await supabaseClient.from('users').select('role').eq('id', user.id).single()
-  if (!data || data.role !== 'admin') return location.href = 'dashboard.html'
-
-  document.getElementById('app').style.display = 'block'
-})()
 </script>
 
 </body>
 </html>
+
