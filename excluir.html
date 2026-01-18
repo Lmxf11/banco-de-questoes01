@@ -1339,20 +1339,11 @@ async function excluirQuestao(id) {
     return;
   }
 
-  const { data: perfil, error } = await supabaseClient
-    .from("users")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  if (error || !perfil || perfil.role !== "admin") {
-    alert("Acesso restrito");
-    window.location.href = "dashboard.html";
-  }
 })();
 
 </script>
 
 </body>
 </html>
+
 
