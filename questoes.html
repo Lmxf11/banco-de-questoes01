@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Resolver Questões — Mesa de Estudos</title>
-  <link rel="icon" type="image/png" href="imagem.jpeg">
+  <link rel="icon" type="image/jpeg" href="imagem.jpeg">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="materias.js"></script>
@@ -458,6 +458,26 @@ async function carregarQuestoes() {
   respostas = new Array(questoes.length).fill(null)
   document.getElementById('totalQ').textContent = questoes.length
 
+  // Load previous answers from DB so user can see what they already answered
+  const { data: { user } } = await supabaseClient.auth.getUser()
+  if (user) {
+    const questaoIds = questoes.map(q => q.id)
+    const { data: respostasDB } = await supabaseClient
+      .from('respostas')
+      .select('questao_id, resposta, acertou')
+      .eq('user_id', user.id)
+      .in('questao_id', questaoIds)
+
+    if (respostasDB && respostasDB.length > 0) {
+      respostasDB.forEach(r => {
+        const idx = questoes.findIndex(q => q.id === r.questao_id)
+        if (idx !== -1) {
+          respostas[idx] = { letra: r.resposta, correta: r.acertou }
+        }
+      })
+    }
+  }
+
   const startIdx = parseInt(params.get('start') || '0')
   if (startIdx > 0 && startIdx < questoes.length) indiceAtual = startIdx
 
@@ -561,6 +581,36 @@ async function registrarResposta(letra, acertou) {
   const q = questoes[indiceAtual]
 
   try {
+    // Check if answer already exists to prevent duplicates
+    const { data: existing } = await supabaseClient
+      .from('respostas')
+      .select('id')
+      .eq('user_id', user.id)
+      .eq('questao_id', q.id)
+      .limit(1)
+
+    if (existing && existing.length > 0) {
+      // Update existing answer instead of inserting duplicate
+      await supabaseClient.from('respostas').update({
+        resposta: letra,
+        acertou: acertou
+      }).eq('id', existing[0].id)
+
+      // Update desempenho too
+      const { data: depExisting } = await supabaseClient
+        .from('desempenho')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('materia', q.materia)
+        .limit(1)
+      if (depExisting && depExisting.length > 0) {
+        await supabaseClient.from('desempenho').update({
+          correta: acertou
+        }).eq('id', depExisting[0].id)
+      }
+      return
+    }
+
     // Insert into respostas with full question reference
     await supabaseClient.from('respostas').insert([{
       user_id: user.id,

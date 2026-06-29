@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Materiais de Estudo</title>
-<link rel="icon" type="image/png" href="imagem.jpeg">
+<link rel="icon" type="image/jpeg" href="imagem.jpeg">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
@@ -393,17 +393,21 @@ const btnCadastrar = document.getElementById('btnCadastrar')
 const btnExcluir = document.getElementById('btnExcluir')
 
 async function verificarAdmin() {
-  const { data: { user } } = await supabaseClient.auth.getUser()
-  if (user) {
-    const { data: userData } = await supabaseClient
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser()
+    if (!user) return
+    const { data: userData, error } = await supabaseClient
       .from('users')
       .select('role')
       .eq('id', user.id)
       .single()
+    if (error) { console.error('Erro ao verificar admin:', error); return }
     if (userData && userData.role === 'admin') {
       btnCadastrar.classList.add('show')
       btnExcluir.classList.add('show')
     }
+  } catch (e) {
+    console.error('Erro verificarAdmin:', e)
   }
 }
 
@@ -412,7 +416,12 @@ async function logout() {
   window.location.href = 'login.html'
 }
 
-verificarAdmin()
+// Auth guard - redirect to login if not authenticated, then init
+(async () => {
+  const { data: { user } } = await supabaseClient.auth.getUser()
+  if (!user) { window.location.href = 'login.html'; return }
+  await verificarAdmin()
+})()
 
 // ===== POPULATE MATERIA FILTER =====
 const filterMateria = document.getElementById('filterMateria')

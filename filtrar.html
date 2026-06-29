@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Banco de Questões — Mesa de Estudos</title>
-  <link rel="icon" type="image/png" href="imagem.jpeg">
+  <link rel="icon" type="image/jpeg" href="imagem.jpeg">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="materias.js"></script>
@@ -518,6 +518,7 @@ function renderSubjectList(filter = '') {
 
 function handleMateriaChange(materiaName, checked) {
   if (checked) {
+    // Single-select: uncheck all others, only this one stays checked
     selectedMateria = materiaName
     areaSelect.innerHTML = '<option value="">Selecione uma área</option>'
     assuntoSelect.innerHTML = '<option value="">Selecione um assunto</option>'
@@ -525,8 +526,8 @@ function handleMateriaChange(materiaName, checked) {
     areaSelect.disabled = false
 
     if (MATERIAS_MAP[materiaName]) {
-      MATERIAS_MAP[materiaName].areas.forEach(a => {
-        areaSelect.innerHTML += `<option value="${a}">${a}</option>`
+      MATERIAS_MAP[materiaName].areas.forEach(areaName => {
+        areaSelect.innerHTML += `<option value="${areaName}">${areaName}</option>`
       })
     }
   } else {
@@ -613,7 +614,32 @@ async function buscarQuestoes() {
       return
     }
 
-    questoesCache = data || []
+    let filteredData = data || []
+
+    // Apply resolution status filter (jaResolvi / naoResolvi)
+    if (activeResolucaoFilter === 'jaResolvi' || activeResolucaoFilter === 'naoResolvi') {
+      const { data: { user } } = await supabaseClient.auth.getUser()
+      if (user && filteredData.length > 0) {
+        const questaoIds = filteredData.map(q => q.id)
+        const { data: respostasUser } = await supabaseClient
+          .from('respostas')
+          .select('questao_id')
+          .eq('user_id', user.id)
+          .in('questao_id', questaoIds)
+
+        const resolvedIds = new Set((respostasUser || []).map(r => r.questao_id))
+
+        if (activeResolucaoFilter === 'jaResolvi') {
+          filteredData = filteredData.filter(q => resolvedIds.has(q.id))
+        } else {
+          filteredData = filteredData.filter(q => !resolvedIds.has(q.id))
+        }
+      } else if (activeResolucaoFilter === 'jaResolvi') {
+        filteredData = [] // No user = no resolved questions
+      }
+    }
+
+    questoesCache = filteredData
     questaoCount.textContent = questoesCache.length
     renderResults()
   } catch (e) {
@@ -667,9 +693,17 @@ function renderResults() {
   })
 }
 
-// Filter tags
+// Filter tags - mutually exclusive for resolution status
+let activeResolucaoFilter = 'resolucao' // default
 document.querySelectorAll('.filter-tag').forEach(tag => {
-  tag.addEventListener('click', () => { tag.classList.toggle('active') })
+  tag.addEventListener('click', () => {
+    // Remove active from all filter tags
+    document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'))
+    // Activate only the clicked one
+    tag.classList.add('active')
+    activeResolucaoFilter = tag.dataset.filter
+    buscarQuestoes()
+  })
 })
 
 // Action buttons — FIX: Pass filters via URL params instead of localStorage

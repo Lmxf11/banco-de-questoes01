@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Excluir Questões — Mesa de Estudos</title>
-  <link rel="icon" type="image/png" href="imagem.jpeg">
+  <link rel="icon" type="image/jpeg" href="imagem.jpeg">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="materias.js"></script>
@@ -315,9 +315,9 @@ materia.addEventListener('change', () => {
   resetSelect(assunto, 'Todos os assuntos')
   if (!materia.value) return
   area.disabled = false
-  MATERIAS_MAP[materia.value].areas.forEach(a => {
+  MATERIAS_MAP[materia.value].areas.forEach(areaName => {
     const opt = document.createElement('option')
-    opt.value = a; opt.textContent = a
+    opt.value = areaName; opt.textContent = areaName
     area.appendChild(opt)
   })
 })
@@ -328,9 +328,9 @@ area.addEventListener('change', () => {
   assunto.disabled = false
   const assuntos = MATERIAS_MAP[materia.value]?.assuntos?.[area.value]
   if (assuntos) {
-    assuntos.forEach(a => {
+    assuntos.forEach(assuntoName => {
       const opt = document.createElement('option')
-      opt.value = a; opt.textContent = a
+      opt.value = assuntoName; opt.textContent = assuntoName
       assunto.appendChild(opt)
     })
   }

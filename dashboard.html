@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Meu Desempenho</title>
-<link rel="icon" type="image/png" href="imagem.jpeg">
+<link rel="icon" type="image/jpeg" href="imagem.jpeg">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link rel="stylesheet" href="style.css">
 <style>
   /* ===== DASHBOARD-SPECIFIC OVERRIDES ===== */
@@ -668,7 +667,7 @@
     </div>
 
     <div class="more-details">
-      <button class="btn-details">Mais detalhes</button>
+      <button class="btn-details" id="btnMaisDetalhes">Mais detalhes</button>
     </div>
   </div>
 
@@ -712,17 +711,21 @@ const SUBJECT_CONFIG = {
 }
 
 async function verificarAdmin() {
-  const { data: { user } } = await supabaseClient.auth.getUser()
-  if (user) {
-    const { data: userData } = await supabaseClient
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser()
+    if (!user) return
+    const { data: userData, error } = await supabaseClient
       .from('users')
       .select('role')
       .eq('id', user.id)
       .single()
+    if (error) { console.error('Erro ao verificar admin:', error); return }
     if (userData && userData.role === 'admin') {
       btnCadastrar.classList.add('show')
       btnExcluir.classList.add('show')
     }
+  } catch (e) {
+    console.error('Erro verificarAdmin:', e)
   }
 }
 
@@ -731,13 +734,13 @@ async function logout() {
   window.location.href = 'login.html'
 }
 
-// Auth guard — redirect if not logged in
+// Auth guard + init — wait for auth before loading data
 (async () => {
   const { data: { user } } = await supabaseClient.auth.getUser()
   if (!user) { window.location.href = 'login.html'; return }
+  await verificarAdmin()
+  carregarDados()
 })()
-
-verificarAdmin()
 
 // ===== CIRCULAR PROGRESS =====
 function setProgress(percent) {
@@ -909,6 +912,11 @@ async function carregarDados() {
 
   const taxa = total > 0 ? Math.round((acertos / total) * 100) : 0
 
+  // Store global stats for tab switching
+  acertosGlobal = acertos
+  errosGlobal = erros
+  totalGlobal = total
+
   // Update stat cards
   document.getElementById('total').textContent = total
   document.getElementById('acertos').textContent = acertos
@@ -921,15 +929,55 @@ async function carregarDados() {
   renderBarChart(acertos, erros, total)
 }
 
-carregarDados()
+
+// ===== MAIS DETALHES =====
+document.getElementById('btnMaisDetalhes').addEventListener('click', () => {
+  document.querySelector('.subjects-section').scrollIntoView({ behavior: 'smooth' })
+})
 
 // ===== TAB INTERACTION =====
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'))
     tab.classList.add('active')
+    // Update bar chart based on selected tab
+    const tabText = tab.textContent.trim()
+    if (tabText === 'Total de questões') {
+      renderBarChartTotals()
+    } else {
+      renderBarChart(acertosGlobal, errosGlobal, totalGlobal)
+    }
   })
 })
+
+// Global stats for tab switching
+let acertosGlobal = 0, errosGlobal = 0, totalGlobal = 0
+
+function renderBarChartTotals() {
+  const container = document.getElementById('barChart')
+  container.innerHTML = ''
+  const rows = [
+    { label: 'Corretas', value: acertosGlobal, cls: 'blue' },
+    { label: 'Erradas', value: errosGlobal, cls: 'red' },
+    { label: 'Total', value: totalGlobal, cls: 'gray' }
+  ]
+  rows.forEach(r => {
+    const row = document.createElement('div')
+    row.className = 'bar-row'
+    row.innerHTML = `
+      <span class="bar-label">${r.label}</span>
+      <div class="bar-track">
+        <div class="bar-fill ${r.cls}" style="width: 0%"></div>
+      </div>
+      <span class="bar-percent">${r.value}</span>
+    `
+    container.appendChild(row)
+    setTimeout(() => {
+      const fill = row.querySelector('.bar-fill')
+      fill.style.width = (totalGlobal > 0 ? Math.round((r.value / totalGlobal) * 100) : 0) + '%'
+    }, 200)
+  })
+}
 </script>
 
 </body>
