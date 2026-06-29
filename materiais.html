@@ -1,10 +1,584 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Materiais</title>
-  <link rel="icon" type="image/png" href="imagem.jpeg">
-  <img src="imagem.jpeg" class="floating-logo" alt="Logo">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Materiais de Estudo</title>
+<link rel="icon" type="image/png" href="imagem.jpeg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  body {
+    background: var(--bg-dark);
+    color: var(--text-primary);
+  }
+
+  .layout {
+    display: flex;
+    min-height: calc(100vh - 56px);
+  }
+
+  main {
+    flex: 1;
+    padding: 32px 36px;
+  }
+
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  .page-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+
+  /* ===== FILTER BAR ===== */
+  .filter-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter-bar select {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    min-width: 160px;
+    transition: border-color 0.2s;
+  }
+
+  .filter-bar select:hover,
+  .filter-bar select:focus {
+    border-color: var(--blue-primary);
+    outline: none;
+  }
+
+  .filter-bar select option {
+    background: var(--bg-mid);
+    color: #fff;
+  }
+
+  .search-input {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    flex: 1;
+    min-width: 200px;
+    transition: border-color 0.2s;
+  }
+
+  .search-input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .search-input:focus {
+    border-color: var(--blue-primary);
+    outline: none;
+  }
+
+  /* ===== MATERIALS GRID ===== */
+  .materials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .material-card {
+    background: var(--bg-card);
+    border-radius: 14px;
+    padding: 24px;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: default;
+  }
+
+  .material-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+
+  .material-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .material-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .material-icon.mat { background: rgba(37,99,235,0.15); color: var(--blue-pale); }
+  .material-icon.port { background: rgba(34,197,94,0.15); color: #4ade80; }
+  .material-icon.fis { background: rgba(251,146,60,0.15); color: #fb923c; }
+  .material-icon.quim { background: rgba(168,85,247,0.15); color: #c084fc; }
+  .material-icon.bio { background: rgba(20,184,166,0.15); color: #2dd4bf; }
+  .material-icon.ing { background: rgba(244,63,94,0.15); color: #fb7185; }
+  .material-icon.default { background: rgba(255,255,255,0.08); color: var(--text-muted); }
+
+  .material-card-header h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.3;
+  }
+
+  .material-card-header .materia-badge {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--blue-pale);
+    background: rgba(37,99,235,0.15);
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-top: 3px;
+  }
+
+  .material-card-body {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .material-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .material-tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.06);
+    color: var(--text-secondary);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .material-card-footer {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .btn-material {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--blue-primary);
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+  }
+
+  .btn-material:hover {
+    background: #1d4ed8;
+  }
+
+  .btn-material.secondary {
+    background: rgba(255,255,255,0.08);
+    color: var(--text-secondary);
+  }
+
+  .btn-material.secondary:hover {
+    background: rgba(255,255,255,0.14);
+    color: #fff;
+  }
+
+  .material-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: auto;
+  }
+
+  /* ===== EMPTY STATE ===== */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+  }
+
+  .empty-state svg {
+    width: 64px;
+    height: 64px;
+    color: rgba(255,255,255,0.15);
+    margin-bottom: 16px;
+  }
+
+  .empty-state h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+
+  .empty-state p {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ===== COUNT BADGE ===== */
+  .count-badge {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+
+  .count-badge strong {
+    color: var(--blue-pale);
+    font-weight: 600;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    main {
+      padding: 20px 16px;
+    }
+    .materials-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .filter-bar {
+      flex-direction: column;
+    }
+    .filter-bar select,
+    .search-input {
+      width: 100%;
+      min-width: auto;
+    }
+  }
+</style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
 </head>
+
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="top-bar-left">
+    <img src="imagem.jpeg" class="logo-circle" alt="Logo">
+    <span>Mesa de Estudos</span>
+  </div>
+  <div class="top-bar-right">
+    <button class="btn-bar" onclick="window.location.href='filtrar.html'">Resolver questões</button>
+    <button class="btn-bar" onclick="window.location.href='dashboard.html'">Meu desempenho</button>
+  </div>
+</div>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside>
+  <h2>
+    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 3L1 9l11 6 9-4.91V17h2V9"/></svg>
+    <span class="text">Mesa de Estudos</span>
+  </h2>
+
+  <a href="dashboard.html">
+    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.09-4-4L2 17.49z"/></svg>
+    <span class="text">Meu desempenho</span>
+  </a>
+
+  <a href="filtrar.html">
+    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M15 9H3v2h12V9zm0-4H3v2h12V5zM3 15h8v-2H3v2zm14.5-2L15 15.5l1.5 1.5 2.5-2.5L21.5 17l1.5-1.5-2.5-2.5L23 10.5 21.5 9l-2.5 2.5L16.5 9 15 10.5l2.5 2.5z"/></svg>
+    <span class="text">Resolver questões</span>
+  </a>
+
+  <a href="materiais.html" class="active">
+    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H6V4h2v8l2.5-1.5L13 12V4h5v16z"/></svg>
+    <span class="text">Materiais</span>
+  </a>
+
+  <a href="cadastrar.html" id="btnCadastrar" class="admin-only">
+    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+    <span class="text">Cadastrar</span>
+  </a>
+
+  <a href="excluir.html" id="btnExcluir" class="admin-only">
+    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+    <span class="text">Excluir</span>
+  </a>
+
+  <div style="flex:1"></div>
+
+  <a href="#" onclick="logout(); return false;" style="margin-top:auto">
+    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+    <span class="text">Sair</span>
+  </a>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main>
+  <h1>Materiais de Estudo</h1>
+  <p class="page-desc">Explore materiais de apoio organizados por matéria e assunto para complementar seus estudos e melhorar seu desempenho nas questões.</p>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <select id="filterMateria">
+      <option value="">Todas as matérias</option>
+    </select>
+    <select id="filterTipo">
+      <option value="">Todos os tipos</option>
+      <option value="resumo">Resumo</option>
+      <option value="video">Vídeo</option>
+      <option value="formula">Fórmulas</option>
+      <option value="exercicio">Exercícios</option>
+    </select>
+    <input type="text" class="search-input" id="searchInput" placeholder="Buscar material...">
+    <button class="btn-material" onclick="filterMaterials()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Buscar
+    </button>
+  </div>
+
+  <div class="count-badge" id="countBadge">Exibindo <strong>0</strong> materiais</div>
+
+  <!-- MATERIALS GRID -->
+  <div class="materials-grid" id="materialsGrid">
+    <!-- Dynamically populated -->
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div class="empty-state" id="emptyState" style="display:none">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+    <h3>Nenhum material encontrado</h3>
+    <p>Tente ajustar os filtros ou buscar por outro termo.</p>
+  </div>
+</main>
+
+</div>
+
+<img src="imagem.jpeg" class="floating-logo" alt="Logo">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="materias.js"></script>
+<script>
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
+const btnCadastrar = document.getElementById('btnCadastrar')
+const btnExcluir = document.getElementById('btnExcluir')
+
+async function verificarAdmin() {
+  const { data: { user } } = await supabaseClient.auth.getUser()
+  if (user) {
+    const { data: userData } = await supabaseClient
+      .from('users')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+    if (userData && userData.role === 'admin') {
+      btnCadastrar.classList.add('show')
+      btnExcluir.classList.add('show')
+    }
+  }
+}
+
+async function logout() {
+  await supabaseClient.auth.signOut()
+  window.location.href = 'login.html'
+}
+
+verificarAdmin()
+
+// ===== POPULATE MATERIA FILTER =====
+const filterMateria = document.getElementById('filterMateria')
+Object.keys(MATERIAS_MAP).forEach(materia => {
+  const opt = document.createElement('option')
+  opt.value = materia
+  opt.textContent = materia
+  filterMateria.appendChild(opt)
+})
+
+// ===== ICON MAP =====
+const iconMap = {
+  'Matemática': 'mat',
+  'Português': 'port',
+  'Física': 'fis',
+  'Química': 'quim',
+  'Biologia': 'bio',
+  'Inglês': 'ing'
+}
+
+const emojiMap = {
+  'Matemática': '📐',
+  'Português': '📝',
+  'Física': '⚡',
+  'Química': '🧪',
+  'Biologia': '🧬',
+  'Inglês': '🌎'
+}
+
+// ===== MATERIALS DATA =====
+// Built from MATERIAS_MAP — static study references for each subject
+const materialsData = []
+
+Object.entries(MATERIAS_MAP).forEach(([materia, info]) => {
+  const areas = info.areas || []
+  const assuntos = info.assuntos || {}
+  const icon = iconMap[materia] || 'default'
+  const emoji = emojiMap[materia] || '📚'
+
+  // Add a general summary for each subject
+  materialsData.push({
+    titulo: `Resumo de ${materia}`,
+    materia: materia,
+    tipo: 'resumo',
+    descricao: `Resumo completo dos principais tópicos de ${materia}, abordando ${areas.slice(0,4).join(', ')} e muito mais. Ideal para revisão rápida antes das provas.`,
+    tags: areas.slice(0, 5),
+    link: '#'
+  })
+
+  // Add formula sheet for quantitative subjects
+  if (['Matemática', 'Física', 'Química'].includes(materia)) {
+    materialsData.push({
+      titulo: `Fórmulas de ${materia}`,
+      materia: materia,
+      tipo: 'formula',
+      descricao: `Folha de fórmulas essenciais de ${materia} com todas as equações e relações importantes para resolver questões de concursos e vestibulares.`,
+      tags: ['Fórmulas', 'Equações', 'Resumo rápido'],
+      link: '#'
+    })
+  }
+
+  // Add exercise set per subject
+  materialsData.push({
+    titulo: `Exercícios de ${materia}`,
+    materia: materia,
+    tipo: 'exercicio',
+    descricao: `Lista de exercícios selecionados de ${materia} com gabarito comentado. Perfeito para praticar e identificar pontos fracos antes da prova.`,
+    tags: ['Exercícios', 'Gabarito', 'Prática'],
+    link: '#'
+  })
+
+  // Add per-area materials (limit to first 3 areas per subject)
+  areas.slice(0, 3).forEach(area => {
+    const subAssuntos = assuntos[area] || []
+    materialsData.push({
+      titulo: `${area} — ${materia}`,
+      materia: materia,
+      tipo: 'resumo',
+      descricao: `Material de estudo focado em ${area} dentro de ${materia}. Abrange tópicos como ${subAssuntos.slice(0,3).join(', ')} com explicações detalhadas e exemplos.`,
+      tags: [area, ...subAssuntos.slice(0, 3)],
+      link: '#'
+    })
+  })
+})
+
+// ===== RENDER MATERIALS =====
+function renderMaterials(items) {
+  const grid = document.getElementById('materialsGrid')
+  const empty = document.getElementById('emptyState')
+  const count = document.getElementById('countBadge')
+
+  grid.innerHTML = ''
+
+  if (items.length === 0) {
+    empty.style.display = 'block'
+    count.innerHTML = 'Exibindo <strong>0</strong> materiais'
+    return
+  }
+
+  empty.style.display = 'none'
+  count.innerHTML = `Exibindo <strong>${items.length}</strong> material${items.length !== 1 ? 'is' : ''}`
+
+  items.forEach(item => {
+    const icon = iconMap[item.materia] || 'default'
+    const emoji = emojiMap[item.materia] || '📚'
+    const tipoLabel = { resumo: 'Resumo', video: 'Vídeo', formula: 'Fórmulas', exercicio: 'Exercícios' }[item.tipo] || 'Material'
+    const tipoIcon = { resumo: '📖', video: '🎬', formula: '📐', exercicio: '✏️' }[item.tipo] || '📄'
+
+    const card = document.createElement('div')
+    card.className = 'material-card'
+    card.innerHTML = `
+      <div class="material-card-header">
+        <div class="material-icon ${icon}">${emoji}</div>
+        <div>
+          <h3>${item.titulo}</h3>
+          <span class="materia-badge">${item.materia} · ${tipoLabel}</span>
+        </div>
+      </div>
+      <div class="material-card-body">${item.descricao}</div>
+      <div class="material-tags">
+        ${item.tags.map(t => `<span class="material-tag">${t}</span>`).join('')}
+      </div>
+      <div class="material-card-footer">
+        <a href="${item.link}" class="btn-material">${tipoIcon} Acessar</a>
+        <a href="filtrar.html?materia=${encodeURIComponent(item.materia)}" class="btn-material secondary">Praticar questões</a>
+      </div>
+    `
+    grid.appendChild(card)
+  })
+}
+
+// ===== FILTER =====
+function filterMaterials() {
+  const materiaVal = document.getElementById('filterMateria').value
+  const tipoVal = document.getElementById('filterTipo').value
+  const searchVal = document.getElementById('searchInput').value.toLowerCase().trim()
+
+  let filtered = materialsData
+
+  if (materiaVal) {
+    filtered = filtered.filter(m => m.materia === materiaVal)
+  }
+
+  if (tipoVal) {
+    filtered = filtered.filter(m => m.tipo === tipoVal)
+  }
+
+  if (searchVal) {
+    filtered = filtered.filter(m =>
+      m.titulo.toLowerCase().includes(searchVal) ||
+      m.descricao.toLowerCase().includes(searchVal) ||
+      m.tags.some(t => t.toLowerCase().includes(searchVal))
+    )
+  }
+
+  renderMaterials(filtered)
+}
+
+// ===== LIVE SEARCH =====
+document.getElementById('searchInput').addEventListener('input', filterMaterials)
+document.getElementById('filterMateria').addEventListener('change', filterMaterials)
+document.getElementById('filterTipo').addEventListener('change', filterMaterials)
+
+// ===== INIT =====
+renderMaterials(materialsData)
+</script>
+
+</body>
+</html>

@@ -2,295 +2,416 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Questões</title>
+  <title>Resolver Questões — Mesa de Estudos</title>
   <link rel="icon" type="image/png" href="imagem.jpeg">
-  <img src="imagem.jpeg" class="floating-logo" alt="Logo">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="materias.js"></script>
+  <link rel="stylesheet" href="style.css">
+
 <style>
-* {
-  box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
+/* ===== QUESTÃO PAGE — CLEAN LAYOUT ===== */
+.questao-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: calc(100vh - 56px);
+  padding: 32px 20px 60px;
 }
 
-/* ===== FUNDO ===== */
-body {
-  margin: 0;
-  min-height: 100vh;
-
-  background: radial-gradient(
-    circle at top left,
-    #1e3a8a 0%,
-    #1e40af 35%,
-    #1d4ed8 70%,
-    #2563eb 100%
-  );
-
-  color: #e0e7ff;
+/* ===== PROGRESS BAR (top) ===== */
+.questao-progress-bar {
+  width: 100%;
+  max-width: 760px;
+  margin-bottom: 28px;
 }
 
-/* ===== HEADER ===== */
-header {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(14px);
-
-  padding: 16px 32px;
-  font-size: 18px;
-  font-weight: 700;
-
-  border-bottom: 1px solid rgba(255,255,255,0.15);
-}
-
-/* ===== CONTAINER ===== */
-.pagina {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 0 20px;
-}
-
-/* ===== CARD QUESTÃO ===== */
-.questao-card {
-  background: linear-gradient(
-    160deg,
-    rgba(255,255,255,0.10),
-    rgba(255,255,255,0.04)
-  );
-
-  border-radius: 22px;
-  border: 1px solid rgba(255,255,255,0.18);
-
-  padding: 28px;
-
-  backdrop-filter: blur(14px);
-
-  box-shadow:
-    0 30px 60px rgba(0,0,0,0.35),
-    inset 0 1px 0 rgba(255,255,255,0.25);
-}
-
-/* ===== META ===== */
-.meta {
-  font-size: 14px;
-  color: #c7d2fe;
+.questao-progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 10px;
 }
 
-/* ===== TÍTULO ===== */
-.titulo {
-  font-size: 22px;
+.questao-counter {
+  font-size: 15px;
   font-weight: 700;
-  color: #eff6ff;
-  margin-bottom: 18px;
+  color: var(--white);
 }
 
-/* ===== ENUNCIADO ===== */
-.enunciado {
-  white-space: pre-wrap;
+.questao-counter span {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.questao-mini-stats {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.questao-mini-stats .certas { color: var(--success); }
+.questao-mini-stats .erradas { color: var(--error); }
+
+.progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue-primary), var(--blue-light));
+  border-radius: 10px;
+  transition: width 0.4s ease;
+}
+
+/* ===== QUESTION CARD ===== */
+.question-card {
+  width: 100%;
+  max-width: 760px;
+  background: linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  padding: 36px 40px;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-card);
+}
+
+.question-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.meta-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.meta-badge.materia { background: rgba(37,99,235,0.2); color: var(--blue-pale); }
+.meta-badge.area { background: rgba(96,165,250,0.15); color: var(--blue-soft); }
+.meta-badge.assunto { background: rgba(147,197,253,0.12); color: var(--blue-pale); }
+
+.question-number {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--blue-primary);
+  margin-bottom: 14px;
+}
+
+.question-enunciado {
   font-size: 16px;
-  line-height: 1.7;
-  margin-bottom: 26px;
-  color: #e0e7ff;
+  line-height: 1.8;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  margin-bottom: 32px;
 }
 
 /* ===== ALTERNATIVAS ===== */
 .alternativas {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .alternativa {
   display: flex;
+  align-items: flex-start;
   gap: 14px;
-  padding: 14px 18px;
-
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.22);
-
-  background: rgba(255,255,255,0.12);
-  color: #e0e7ff;
-
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border);
+  background: rgba(255,255,255,0.05);
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
+  transition: all 0.2s;
+  user-select: none;
 }
 
 .alternativa:hover {
-  background: rgba(255,255,255,0.18);
-  transform: translateY(-1px);
+  background: rgba(37,99,235,0.08);
+  border-color: rgba(37,99,235,0.3);
+  transform: translateX(4px);
 }
 
-.letra {
-  font-weight: 800;
-  color: #93c5fd;
-  min-width: 20px;
-}
-
-/* ===== CORRETA / ERRADA ===== */
-.correta {
-  background: rgba(52,211,153,0.18);
-  border-color: #34d399;
-  box-shadow: 0 0 0 3px rgba(52,211,153,0.35);
-}
-
-.errada {
-  background: rgba(248,113,113,0.18);
-  border-color: #f87171;
-  box-shadow: 0 0 0 3px rgba(248,113,113,0.35);
-}
-
-/* ===== AÇÕES ===== */
-.acoes {
-  margin-top: 30px;
+.alt-letter {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
   display: flex;
-  gap: 14px;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  background: rgba(255,255,255,0.1);
+  color: var(--blue-pale);
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  transition: all 0.2s;
 }
 
-/* ===== BOTÕES ===== */
-button {
-  padding: 14px 22px;
-  border-radius: 16px;
-  border: none;
+.alternativa:hover .alt-letter {
+  background: var(--blue-primary);
+  color: #fff;
+  border-color: var(--blue-primary);
+}
 
+.alt-text {
+  flex: 1;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  padding-top: 5px;
+}
+
+/* Selected state */
+.alternativa.selected {
+  background: rgba(37,99,235,0.12);
+  border-color: var(--blue-primary);
+}
+.alternativa.selected .alt-letter {
+  background: var(--blue-primary);
+  color: #fff;
+  border-color: var(--blue-primary);
+}
+
+/* Correct answer */
+.alternativa.correct {
+  background: var(--success-bg);
+  border-color: var(--success);
+}
+.alternativa.correct .alt-letter {
+  background: var(--success);
+  color: #fff;
+  border-color: var(--success);
+}
+
+/* Wrong answer */
+.alternativa.wrong {
+  background: var(--error-bg);
+  border-color: var(--error);
+}
+.alternativa.wrong .alt-letter {
+  background: var(--error);
+  color: #fff;
+  border-color: var(--error);
+}
+
+/* ===== FEEDBACK ===== */
+.feedback {
+  margin-top: 20px;
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 14px;
+  display: none;
+}
+
+.feedback.show { display: block; }
+.feedback.acerto { background: var(--success-bg); color: var(--success); border: 1px solid rgba(52,211,153,0.3); }
+.feedback.erro { background: var(--error-bg); color: var(--error); border: 1px solid rgba(248,113,113,0.3); }
+
+/* ===== NAVIGATION ===== */
+.question-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.nav-btn {
+  padding: 12px 28px;
+  border-radius: var(--radius-md);
+  border: none;
   font-weight: 700;
   font-size: 14px;
-
   cursor: pointer;
-
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.btn-voltar {
-  background: rgba(255,255,255,0.18);
-  color: #e0e7ff;
+.nav-btn.prev {
+  background: rgba(255,255,255,0.1);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
 }
 
-.btn-voltar:hover {
-  transform: translateY(-2px);
-}
+.nav-btn.prev:hover { background: rgba(255,255,255,0.15); }
+.nav-btn.prev:disabled { opacity: 0.4; cursor: not-allowed; }
 
-.btn-proxima {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+.nav-btn.next {
+  background: linear-gradient(135deg, var(--blue-light), var(--blue-primary));
   color: #fff;
 }
 
-.btn-proxima:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 32px rgba(37,99,235,0.45);
+.nav-btn.next:hover { transform: translateY(-2px); box-shadow: var(--shadow-btn); }
+.nav-btn.next:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.nav-btn.finish {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff;
 }
 
-.btn-proxima:disabled {
-  background: rgba(255,255,255,0.25);
-  cursor: not-allowed;
-  box-shadow: none;
-  transform: none;
+.nav-btn.finish:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(16,185,129,0.4); }
+
+/* ===== QUESTION DOTS (mini nav) ===== */
+.question-dots {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 760px;
+  margin-top: 24px;
 }
 
-/* ===== LOGO FLUTUANTE ===== */
-.floating-logo {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-
-  width: 64px;
-  height: 64px;
-
-  border-radius: 50%;
-  object-fit: cover;
-
-  background: #fff;
-  padding: 4px;
-
-  box-shadow:
-    0 12px 30px rgba(0,0,0,0.35),
-    0 0 0 4px rgba(255,255,255,0.15);
-
-  z-index: 999;
-
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+.q-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
 }
 
-.floating-logo:hover {
-  transform: translateY(-4px) scale(1.05);
-  box-shadow:
-    0 18px 40px rgba(0,0,0,0.45),
-    0 0 0 6px rgba(255,255,255,0.2);
+.q-dot:hover { background: rgba(37,99,235,0.15); color: var(--blue-pale); }
+.q-dot.current { background: var(--blue-primary); color: #fff; border-color: var(--blue-primary); }
+.q-dot.correct { background: var(--success); color: #fff; border-color: var(--success); }
+.q-dot.wrong { background: var(--error); color: #fff; border-color: var(--error); }
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-state svg { width: 80px; height: 80px; color: var(--text-muted); margin-bottom: 16px; }
+.empty-state h3 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+.empty-state p { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6; }
+
+/* ===== FINAL SUMMARY ===== */
+.summary-card {
+  width: 100%;
+  max-width: 760px;
+  background: linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  padding: 48px 40px;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.summary-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin: 24px 0 32px;
+}
+
+.summary-stat {
+  text-align: center;
+}
+
+.summary-stat .val {
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.summary-stat .label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.summary-btns {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .questao-wrapper { padding: 20px 16px 48px; }
+  .question-card { padding: 24px 20px; }
+}
+
+@media (max-width: 600px) {
+  .alternativa { padding: 12px 14px; }
+  .question-nav { flex-direction: column; }
+  .nav-btn { width: 100%; justify-content: center; }
+  .summary-stats { gap: 20px; }
+  .summary-stat .val { font-size: 32px; }
 }
 </style>
-
-
-   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-
-  
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-
-  <script defer>
-  document.addEventListener("DOMContentLoaded", function () {
-    renderMathInElement(document.body, {
-      delimiters: [
-        { left: "$$", right: "$$", display: true },
-        { left: "$", right: "$", display: false },
-        { left: "\\(", right: "\\)", display: false },
-        { left: "\\[", right: "\\]", display: true }
-      ],
-      throwOnError: false
-    });
-  });
-</script>
-  
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      window.renderKatex = (el) => {
-        renderMathInElement(el, {
-          delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "\\[", right: "\\]", display: true },
-            { left: "$", right: "$", display: false },
-            { left: "\\(", right: "\\)", display: false }
-          ],
-          throwOnError: false,
-          strict: false,
-          trust: true,
-          macros: {
-            "\\R": "\\mathbb{R}",
-            "\\N": "\\mathbb{N}",
-            "\\Z": "\\mathbb{Z}",
-            "\\Q": "\\mathbb{Q}"
-          }
-        })
-      }
-    })
-
-    
-  </script>
-
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
 </head>
 
 <body>
 
-<header>Questões</header>
-
-<div class="pagina">
-  <div id="container"></div>
+<!-- TOP BAR (minimal — só logo e Desempenho) -->
+<div class="top-bar">
+  <div class="top-bar-left">
+    <img src="imagem.jpeg" class="logo-circle" alt="Logo">
+    <span>Mesa de Estudos</span>
+  </div>
+  <div class="top-bar-right">
+    <a href="dashboard.html" class="btn-bar">Desempenho</a>
+  </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- MAIN: Só a questão -->
+<div class="questao-wrapper">
+
+  <!-- Progress bar -->
+  <div class="questao-progress-bar">
+    <div class="questao-progress-info">
+      <div class="questao-counter">Questão <span id="currentQ">0</span> <span>/ <span id="totalQ">0</span></span></div>
+      <div class="questao-mini-stats">
+        <span class="certas" id="acertosMini">✓ 0</span>
+        <span class="erradas" id="errosMini">✗ 0</span>
+      </div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <!-- Question container -->
+  <div id="questionContainer"></div>
+
+  <!-- Question dots (mini navigation below) -->
+  <div class="question-dots" id="questionDots"></div>
+
+</div>
+
+<img src="imagem.jpeg" class="floating-logo" alt="Logo">
 
 <script>
-const supabaseClient = supabase.createClient(
-  'https://jsmdszcfgvoczkyfzzvu.supabase.co',
-  'sb_publishable_rqDGnUB-2tHkU4cNz1kRSg_oYRssJLn'
-)
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
 const params = new URLSearchParams(window.location.search)
 const materia = params.get('materia')
@@ -299,13 +420,23 @@ const assunto = params.get('assunto')
 
 let questoes = []
 let indiceAtual = 0
+let respostas = []
 let respondeu = false
 
-const container = document.getElementById('container')
+const container = document.getElementById('questionContainer')
+
+// Auth guard — redirect to login if not authenticated
+async function checkAuth() {
+  const { data: { user } } = await supabaseClient.auth.getUser()
+  if (!user) {
+    window.location.href = 'login.html'
+    return false
+  }
+  return true
+}
 
 async function carregarQuestoes() {
   let query = supabaseClient.from('questoes').select('*')
-
   if (materia) query = query.eq('materia', materia)
   if (area) query = query.eq('area', area)
   if (assunto) query = query.eq('assunto', assunto)
@@ -313,68 +444,141 @@ async function carregarQuestoes() {
   const { data, error } = await query
 
   if (error || !data || data.length === 0) {
-    container.innerHTML = '<p>Nenhuma questão encontrada.</p>'
+    container.innerHTML = `
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 15h8M9 9h.01M15 9h.01"/></svg>
+        <h3>Nenhuma questão encontrada</h3>
+        <p>Não há questões disponíveis com os filtros atuais. Tente acessar o banco de questões para selecionar outras opções.</p>
+        <a href="filtrar.html" class="btn btn-primary" style="display:inline-flex">Banco de questões</a>
+      </div>`
     return
   }
 
   questoes = data
+  respostas = new Array(questoes.length).fill(null)
+  document.getElementById('totalQ').textContent = questoes.length
+
+  const startIdx = parseInt(params.get('start') || '0')
+  if (startIdx > 0 && startIdx < questoes.length) indiceAtual = startIdx
+
+  renderDots()
   mostrarQuestao()
+}
+
+function renderDots() {
+  const dots = document.getElementById('questionDots')
+  dots.innerHTML = ''
+  questoes.forEach((q, i) => {
+    const dot = document.createElement('div')
+    dot.className = 'q-dot' + (i === indiceAtual ? ' current' : '')
+    dot.textContent = i + 1
+    if (respostas[i] !== null) {
+      dot.classList.add(respostas[i].correta ? 'correct' : 'wrong')
+      if (i === indiceAtual) dot.classList.add('current')
+    }
+    dot.addEventListener('click', () => { indiceAtual = i; renderDots(); mostrarQuestao(); })
+    dots.appendChild(dot)
+  })
+}
+
+function updateProgress() {
+  const acertos = respostas.filter(r => r && r.correta).length
+  const erros = respostas.filter(r => r && !r.correta).length
+  const total = respostas.filter(r => r !== null).length
+
+  document.getElementById('currentQ').textContent = indiceAtual + 1
+  document.getElementById('acertosMini').textContent = '✓ ' + acertos
+  document.getElementById('errosMini').textContent = '✗ ' + erros
+
+  const pct = questoes.length > 0 ? Math.round((total / questoes.length) * 100) : 0
+  document.getElementById('progressFill').style.width = pct + '%'
 }
 
 function mostrarQuestao() {
   respondeu = false
   const q = questoes[indiceAtual]
 
-  const alternativas = {
-    A: q.alternativa_a,
-    B: q.alternativa_b,
-    C: q.alternativa_c,
-    D: q.alternativa_d
-  }
+  // Build alternatives A-E (filtering out null/empty)
+  const letras = ['A','B','C','D','E']
+  const altKeys = ['alternativa_a','alternativa_b','alternativa_c','alternativa_d','alternativa_e']
+  const alternativas = []
+  letras.forEach((l, i) => {
+    const texto = q[altKeys[i]]
+    if (texto && texto.trim()) alternativas.push({ letra: l, texto })
+  })
+
+  const respostaAnterior = respostas[indiceAtual]
+  if (respostaAnterior) respondeu = true
 
   container.innerHTML = `
-    <div class="questao-card">
-      <div class="meta">${q.materia} • ${q.area} • ${q.assunto}</div>
-      <div class="titulo">Questão ${indiceAtual + 1}</div>
-      <div class="enunciado">${q.enunciado}</div>
-
-      <div class="alternativas">
-        ${Object.entries(alternativas).map(([letra, texto]) => `
-          <div class="alternativa" onclick="responder('${letra}')">
-            <span class="letra">${letra}</span> ${texto}
-          </div>
-        `).join('')}
+    <div class="question-card">
+      <div class="question-meta">
+        <span class="meta-badge materia">${q.materia}</span>
+        <span class="meta-badge area">${q.area}</span>
+        <span class="meta-badge assunto">${q.assunto}</span>
       </div>
-
-      <div class="acoes">
-        <button class="btn-voltar" onclick="history.back()">Voltar</button>
-        <button class="btn-proxima" id="btnProxima" disabled onclick="proxima()">Próxima</button>
+      <div class="question-number">Questão ${indiceAtual + 1}</div>
+      <div class="question-enunciado">${q.enunciado}</div>
+      <div class="alternativas">
+        ${alternativas.map(a => {
+          let cls = 'alternativa'
+          if (respostaAnterior) {
+            const correta = q.correta.toUpperCase()
+            if (a.letra === correta) cls += ' correct'
+            if (a.letra === respostaAnterior.letra && a.letra !== correta) cls += ' wrong'
+            if (a.letra === respostaAnterior.letra && a.letra === correta) cls += ' correct selected'
+          }
+          return `
+          <div class="${cls}" data-letra="${a.letra}" onclick="responder('${a.letra}')">
+            <div class="alt-letter">${a.letra}</div>
+            <div class="alt-text">${a.texto}</div>
+          </div>`
+        }).join('')}
+      </div>
+      <div class="feedback ${respostaAnterior ? 'show' : ''} ${respostaAnterior ? (respostaAnterior.correta ? 'acerto' : 'erro') : ''}" id="feedback">
+        ${respostaAnterior ? (respostaAnterior.correta ? '✅ Resposta correta!' : `❌ Resposta incorreta. A alternativa correta é ${q.correta.toUpperCase()}.`) : ''}
+      </div>
+      <div class="question-nav">
+        <button class="nav-btn prev" onclick="anterior()" ${indiceAtual === 0 ? 'disabled' : ''}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+          Anterior
+        </button>
+        ${indiceAtual < questoes.length - 1
+          ? `<button class="nav-btn next" onclick="proxima()">Próxima <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>`
+          : `<button class="nav-btn finish" onclick="finalizar()">Finalizar <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></button>`
+        }
       </div>
     </div>
   `
+
+  updateProgress()
 }
 
-async function registrarDesempenho(acertou) {
+async function registrarResposta(letra, acertou) {
   const { data: { user } } = await supabaseClient.auth.getUser()
+  if (!user) return
 
-  if (!user) {
-    console.error('Usuário não autenticado')
-    return
-  }
+  const q = questoes[indiceAtual]
 
-  const { error } = await supabaseClient
-    .from('desempenho')
-    .insert([{
+  try {
+    // Insert into respostas with full question reference
+    await supabaseClient.from('respostas').insert([{
       user_id: user.id,
-      materia: questoes[indiceAtual].materia,
-      correta: acertou
+      questao_id: q.id,
+      resposta: letra,
+      acertou: acertou
     }])
 
-  if (error) {
-    console.error('Erro ao salvar desempenho:', error.message)
+    // Insert into desempenho for per-subject tracking
+    await supabaseClient.from('desempenho').insert([{
+      user_id: user.id,
+      materia: q.materia,
+      correta: acertou
+    }])
+  } catch (e) {
+    console.error('Erro ao registrar resposta:', e)
   }
 }
-
 
 async function responder(letra) {
   if (respondeu) return
@@ -383,33 +587,71 @@ async function responder(letra) {
   const correta = questoes[indiceAtual].correta.toUpperCase()
   const acertou = letra === correta
 
+  respostas[indiceAtual] = { letra, correta: acertou }
+
   document.querySelectorAll('.alternativa').forEach(div => {
-    const l = div.querySelector('.letra').innerText
-    if (l === correta) div.classList.add('correta')
-    if (l === letra && l !== correta) div.classList.add('errada')
+    const l = div.dataset.letra
+    if (l === correta) div.classList.add('correct')
+    if (l === letra && l !== correta) div.classList.add('wrong')
+    if (l === letra) div.classList.add('selected')
   })
 
-  document.getElementById('btnProxima').disabled = false
+  const feedback = document.getElementById('feedback')
+  feedback.classList.add('show')
+  feedback.classList.add(acertou ? 'acerto' : 'erro')
+  feedback.textContent = acertou ? '✅ Resposta correta!' : `❌ Resposta incorreta. A alternativa correta é ${correta}.`
 
-  await registrarDesempenho(acertou)
+  await registrarResposta(letra, acertou)
+  updateProgress()
+  renderDots()
+}
+
+function anterior() {
+  if (indiceAtual > 0) { indiceAtual--; renderDots(); mostrarQuestao(); }
 }
 
 function proxima() {
-  indiceAtual++
-
-  if (indiceAtual >= questoes.length) {
-    container.innerHTML = '<p>Fim das questões.</p>'
-    return
-  }
-
-  mostrarQuestao()
+  if (indiceAtual < questoes.length - 1) { indiceAtual++; renderDots(); mostrarQuestao(); }
 }
 
-carregarQuestoes()
-</script>
+function finalizar() {
+  const acertos = respostas.filter(r => r && r.correta).length
+  const erros = respostas.filter(r => r && !r.correta).length
+  const total = respostas.filter(r => r !== null).length
+  const taxa = total > 0 ? Math.round((acertos / total) * 100) : 0
 
+  document.getElementById('questionDots').innerHTML = ''
+
+  container.innerHTML = `
+    <div class="summary-card">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--blue-primary)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+      <h2 style="font-size:26px; font-weight:800; color:var(--white); margin:20px 0 8px;">Sessão finalizada!</h2>
+      <p style="color:var(--text-secondary); margin-bottom:8px; font-size:14px;">Aqui está o resumo da sua sessão:</p>
+      <div class="summary-stats">
+        <div class="summary-stat">
+          <div class="val" style="color:var(--success)">${acertos}</div>
+          <div class="label">Acertos</div>
+        </div>
+        <div class="summary-stat">
+          <div class="val" style="color:var(--error)">${erros}</div>
+          <div class="label">Erros</div>
+        </div>
+        <div class="summary-stat">
+          <div class="val" style="color:var(--blue-pale)">${taxa}%</div>
+          <div class="label">Aproveitamento</div>
+        </div>
+      </div>
+      <div class="summary-btns">
+        <a href="dashboard.html" class="btn btn-primary">Ver desempenho</a>
+      </div>
+    </div>
+  `
+}
+
+// Check auth first, then load questions
+checkAuth().then(isAuth => {
+  if (isAuth) carregarQuestoes()
+})
+</script>
 </body>
 </html>
-
-
-
