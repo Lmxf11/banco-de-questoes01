@@ -400,7 +400,7 @@ document.getElementById('btnGoogleLogin').addEventListener('click', async () => 
   msg.innerText = 'Redirecionando para Google...'
   const { error } = await supabaseClient.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: window.location.origin + '/dashboard.html' }
+    options: { redirectTo: window.location.origin + '/completar_perfil.html' }
   })
   if (error) { msg.style.color = '#f87171'; msg.innerText = 'Erro ao entrar com Google.' }
 })

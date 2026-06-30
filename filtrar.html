@@ -2,161 +2,157 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Questões — Mesa de Estudos</title>
+  <title>Questoes — Mesa de Estudos</title>
   <link rel="icon" type="image/jpeg" href="imagem.jpeg">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="materias.js"></script>
   <link rel="stylesheet" href="style.css">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-body { min-height: 100vh; background: #fff; color: #1e293b; }
-
-/* ===== TOP BAR ===== */
-.f-top-bar {
-  background: #fff;
-  padding: 12px 28px;
+/* ===== TOP BAR (dark) ===== */
+.q-top-bar {
+  background: linear-gradient(135deg, var(--bg-mid), var(--bg-card));
+  padding: 12px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #e2e8f0;
   position: sticky;
   top: 0;
   z-index: 100;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
 }
-.f-top-bar-left { display: flex; align-items: center; gap: 12px; }
-.f-top-bar-left img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }
-.f-top-bar-left span { font-weight: 700; font-size: 15px; color: #0f172a; }
-.f-top-bar-right { display: flex; align-items: center; gap: 16px; }
-.f-top-bar-right .icon-btn {
-  width: 36px; height: 36px; border-radius: 50%; border: none; background: #f1f5f9;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  color: #64748b; position: relative; transition: background 0.15s;
+.q-top-bar-left { display: flex; align-items: center; gap: 14px; }
+.q-top-bar-left img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: var(--white); padding: 2px; border: 2px solid rgba(255,255,255,0.3); }
+.q-top-bar-left span { color: var(--white); font-weight: 700; font-size: 16px; }
+.q-top-bar-right { display: flex; gap: 8px; align-items: center; }
+.q-top-bar-right .icon-btn {
+  width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border);
+  background: rgba(255,255,255,0.06); cursor: pointer; display: flex;
+  align-items: center; justify-content: center; color: var(--text-secondary);
+  position: relative; transition: all 0.15s;
 }
-.f-top-bar-right .icon-btn:hover { background: #e2e8f0; }
-.f-top-bar-right .icon-btn svg { width: 18px; height: 18px; }
-.f-top-bar-right .notif-dot {
-  position: absolute; top: 6px; right: 6px; width: 8px; height: 8px;
-  background: #ef4444; border-radius: 50%; border: 2px solid #fff;
+.q-top-bar-right .icon-btn:hover { background: rgba(37,99,235,0.15); color: var(--blue-pale); }
+.q-top-bar-right .icon-btn svg { width: 18px; height: 18px; }
+.q-top-bar-right .notif-dot { position: absolute; top: 5px; right: 5px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; border: 2px solid var(--bg-mid); }
+.q-top-bar-right .avatar-link {
+  width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--blue-primary);
+  background: rgba(37,99,235,0.2); cursor: pointer; display: flex;
+  align-items: center; justify-content: center; text-decoration: none;
+  transition: border-color 0.15s; overflow: hidden;
 }
-.f-top-bar-right .avatar-btn {
-  width: 36px; height: 36px; border-radius: 50%; border: 2px solid #10b981;
-  background: #d1fae5; cursor: pointer; display: flex; align-items: center;
-  justify-content: center; overflow: hidden; text-decoration: none;
-}
-.f-top-bar-right .avatar-btn:hover { border-color: #059669; }
-.f-top-bar-right .avatar-initial { font-weight: 700; font-size: 14px; color: #059669; }
+.q-top-bar-right .avatar-link:hover { border-color: var(--blue-light); }
+.q-top-bar-right .avatar-link img { width: 100%; height: 100%; object-fit: cover; }
+.q-top-bar-right .avatar-letter { font-weight: 700; font-size: 14px; color: var(--blue-pale); }
 
 /* ===== LAYOUT ===== */
-.f-layout { display: flex; min-height: calc(100vh - 56px); }
+.q-layout { display: flex; min-height: calc(100vh - 56px); }
 
-/* ===== SIDEBAR ===== */
-.f-sidebar {
-  width: 220px; background: #f8fafc; border-right: 1px solid #e2e8f0;
-  padding: 20px 12px; display: flex; flex-direction: column; gap: 2px;
+/* ===== SIDEBAR (dark, no ugly checkboxes) ===== */
+.q-sidebar {
+  width: 240px; background: var(--bg-mid); border-right: 1px solid var(--border);
+  padding: 20px 14px; display: flex; flex-direction: column; gap: 4px;
   flex-shrink: 0; overflow-y: auto;
 }
-.f-sidebar-title {
-  font-size: 11px; font-weight: 700; color: #94a3b8;
-  text-transform: uppercase; letter-spacing: 1px; padding: 8px 12px 10px;
+.q-sidebar-title {
+  font-size: 11px; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 1px; padding: 8px 12px 12px;
 }
-.f-sidebar-item {
-  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
-  border-radius: 8px; cursor: pointer; transition: all 0.15s;
-  border: none; background: none; width: 100%; text-align: left;
-  font-size: 13.5px; font-weight: 500; color: #475569;
+.q-sidebar-item {
+  display: flex; align-items: center; gap: 12px; padding: 11px 14px;
+  border-radius: 10px; cursor: pointer; transition: all 0.15s;
+  border: 1.5px solid transparent; background: none; width: 100%;
+  text-align: left; font-size: 13.5px; font-weight: 500; color: var(--text-secondary);
+  position: relative;
 }
-.f-sidebar-item:hover { background: #e2e8f0; color: #0f172a; }
-.f-sidebar-item.active { background: #0d9488; color: #fff; font-weight: 600; }
-.f-sidebar-item input[type="checkbox"] { width: 16px; height: 16px; accent-color: #0d9488; cursor: pointer; flex-shrink: 0; }
-.f-sidebar-item label { cursor: pointer; font-size: 13.5px; }
+.q-sidebar-item:hover { background: rgba(37,99,235,0.08); color: var(--text-primary); }
+.q-sidebar-item.active {
+  background: rgba(37,99,235,0.15); color: var(--white);
+  border-color: rgba(37,99,235,0.3); font-weight: 600;
+}
+.q-sidebar-item.active::before {
+  content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 20px; border-radius: 0 4px 4px 0; background: var(--blue-primary);
+}
+.q-sidebar-item .check-dot {
+  width: 18px; height: 18px; border-radius: 6px; border: 2px solid var(--border);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; background: transparent;
+}
+.q-sidebar-item.active .check-dot {
+  background: var(--blue-primary); border-color: var(--blue-primary);
+}
+.q-sidebar-item.active .check-dot::after {
+  content: ''; width: 6px; height: 6px; border-radius: 50%; background: #fff;
+}
 
-/* ===== MAIN CONTENT ===== */
-.f-main { flex: 1; padding: 28px 32px; overflow-y: auto; background: #fff; }
-.f-header { margin-bottom: 24px; }
-.f-header h1 { font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
-.f-header p { font-size: 14px; color: #64748b; line-height: 1.5; }
+/* ===== MAIN CONTENT (dark) ===== */
+.q-main { flex: 1; padding: 28px 32px; overflow-y: auto; background: var(--bg-dark); }
+.q-header { margin-bottom: 24px; }
+.q-header h1 { font-size: 24px; font-weight: 800; color: var(--white); margin-bottom: 4px; }
+.q-header p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
 
-/* Filter tabs */
-.f-filter-tabs { display: flex; gap: 0; border-bottom: 2px solid #e2e8f0; margin-bottom: 20px; overflow-x: auto; }
-.f-filter-tab {
-  padding: 10px 18px; font-size: 13px; font-weight: 500; color: #64748b;
+/* Filter tabs (dark) */
+.q-filter-tabs { display: flex; gap: 0; border-bottom: 2px solid rgba(255,255,255,0.08); margin-bottom: 20px; overflow-x: auto; }
+.q-filter-tab {
+  padding: 10px 18px; font-size: 13px; font-weight: 500; color: var(--text-muted);
   border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent;
   margin-bottom: -2px; white-space: nowrap; transition: all 0.15s;
 }
-.f-filter-tab:hover { color: #0d9488; }
-.f-filter-tab.active { color: #0d9488; border-bottom-color: #0d9488; font-weight: 600; }
+.q-filter-tab:hover { color: var(--blue-pale); }
+.q-filter-tab.active { color: var(--blue-pale); border-bottom-color: var(--blue-primary); font-weight: 600; }
 
-.f-filter-content { display: none; margin-bottom: 20px; }
-.f-filter-content.active { display: block; }
-.f-filter-content select, .f-filter-content input[type="text"] {
-  width: 100%; padding: 10px 14px; border-radius: 8px; border: 1.5px solid #e2e8f0;
-  background: #f8fafc; color: #0f172a; font-size: 13px; outline: none;
-  transition: all 0.15s; margin-bottom: 10px; font-family: 'Inter', sans-serif;
+.q-filter-content { display: none; margin-bottom: 20px; }
+.q-filter-content.active { display: block; }
+
+/* Stats row (dark) */
+.q-stats-row { display: flex; gap: 24px; margin-bottom: 24px; align-items: center; }
+.q-stat { font-size: 14px; color: var(--text-secondary); font-weight: 500; }
+.q-stat strong { font-size: 20px; font-weight: 800; color: var(--white); }
+
+/* Notification banner (dark) */
+.q-notif-banner {
+  background: rgba(37,99,235,0.1); border: 1px solid rgba(37,99,235,0.2);
+  border-radius: 10px; padding: 12px 18px; font-size: 13px; color: var(--blue-pale);
+  font-weight: 500; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
 }
-.f-filter-content select:focus, .f-filter-content input[type="text"]:focus {
-  border-color: #0d9488; box-shadow: 0 0 0 3px rgba(13,148,136,0.1);
+
+/* Start questions panel (dark) */
+.q-start-panel {
+  background: linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+  border: 1px solid var(--border); border-radius: var(--radius-xl);
+  padding: 24px 28px; margin-bottom: 24px; backdrop-filter: blur(10px);
 }
-.f-filter-content select { appearance: auto; }
+.q-start-panel h3 { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 14px; }
 
-/* Stats row */
-.f-stats-row { display: flex; gap: 24px; margin-bottom: 24px; align-items: center; }
-.f-stat { font-size: 14px; color: #475569; font-weight: 500; }
-.f-stat strong { font-size: 18px; font-weight: 800; color: #0f172a; }
-
-/* Start questions panel */
-.f-start-panel {
-  background: #f0fdfa; border: 1.5px solid #ccfbf1;
-  border-radius: 14px; padding: 24px 28px; margin-bottom: 24px;
-}
-.f-start-panel h3 { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 14px; }
-
-/* Green filter tags */
-.f-green-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-.f-green-tag {
+/* Green filter tags (dark version — blue accent) */
+.q-filter-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.q-filter-tag {
   padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
-  cursor: pointer; transition: all 0.15s; background: #d1fae5; color: #065f46;
-  border: 1px solid #a7f3d0; user-select: none; display: flex; align-items: center; gap: 5px;
+  cursor: pointer; transition: all 0.15s; background: rgba(37,99,235,0.1);
+  color: var(--blue-pale); border: 1px solid rgba(37,99,235,0.2); user-select: none;
+  display: flex; align-items: center; gap: 5px;
 }
-.f-green-tag:hover { background: #a7f3d0; }
-.f-green-tag.active { background: #0d9488; color: #fff; border-color: #0d9488; }
+.q-filter-tag:hover { background: rgba(37,99,235,0.2); border-color: rgba(37,99,235,0.3); }
+.q-filter-tag.active { background: var(--blue-primary); color: #fff; border-color: var(--blue-primary); }
 
-/* Action buttons row */
-.f-action-row { display: flex; gap: 10px; align-items: center; }
-.f-btn-outline {
-  padding: 10px 22px; border-radius: 10px; border: 1.5px solid #d1d5db;
-  background: #fff; color: #374151; font-weight: 600; font-size: 13px;
-  cursor: pointer; transition: all 0.15s;
-}
-.f-btn-outline:hover { background: #f9fafb; border-color: #9ca3af; }
-.f-btn-primary-green {
-  padding: 10px 28px; border-radius: 10px; border: none; background: #0d9488;
-  color: #fff; font-weight: 700; font-size: 14px; cursor: pointer;
-  transition: all 0.15s; display: inline-flex; align-items: center; gap: 8px;
-}
-.f-btn-primary-green:hover { background: #0f766e; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(13,148,136,0.3); }
-.f-btn-primary-green svg { width: 16px; height: 16px; }
-
-/* Notification banner */
-.f-notif-banner {
-  background: #f0fdfa; border: 1px solid #a7f3d0; border-radius: 10px;
-  padding: 12px 18px; font-size: 13px; color: #065f46; font-weight: 500;
-  margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
-}
+/* Action buttons row (dark) */
+.q-action-row { display: flex; gap: 10px; align-items: center; }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 900px) {
-  .f-layout { flex-direction: column; }
-  .f-sidebar { width: 100%; flex-direction: row; overflow-x: auto; padding: 12px; border-right: none; border-bottom: 1px solid #e2e8f0; }
-  .f-sidebar-title { display: none; }
-  .f-sidebar-item { padding: 8px 14px; white-space: nowrap; }
-  .f-main { padding: 20px 16px; }
+  .q-layout { flex-direction: column; }
+  .q-sidebar { width: 100%; flex-direction: row; overflow-x: auto; padding: 12px; border-right: none; border-bottom: 1px solid var(--border); }
+  .q-sidebar-title { display: none; }
+  .q-sidebar-item { padding: 8px 14px; white-space: nowrap; }
+  .q-sidebar-item::before { display: none; }
+  .q-main { padding: 20px 16px; }
 }
 @media (max-width: 600px) {
-  .f-top-bar { padding: 10px 14px; }
-  .f-header h1 { font-size: 20px; }
-  .f-action-row { flex-direction: column; }
-  .f-action-row button { width: 100%; }
+  .q-top-bar { padding: 10px 14px; }
+  .q-header h1 { font-size: 20px; }
+  .q-action-row { flex-direction: column; }
+  .q-action-row button, .q-action-row a { width: 100%; }
 }
 </style>
 <script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
@@ -164,12 +160,12 @@ body { min-height: 100vh; background: #fff; color: #1e293b; }
 <body>
 
 <!-- TOP BAR -->
-<div class="f-top-bar">
-  <div class="f-top-bar-left">
+<div class="q-top-bar">
+  <div class="q-top-bar-left">
     <img src="imagem.jpeg" alt="Logo">
     <span>Mesa de Estudos</span>
   </div>
-  <div class="f-top-bar-right">
+  <div class="q-top-bar-right">
     <button class="icon-btn" title="Favoritos" onclick="alert('Em desenvolvimento')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
     </button>
@@ -177,102 +173,115 @@ body { min-height: 100vh; background: #fff; color: #1e293b; }
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       <span class="notif-dot"></span>
     </button>
-    <a href="perfil.html" class="avatar-btn" title="Perfil">
-      <span class="avatar-initial" id="avatarInitial">?</span>
+    <a href="perfil.html" class="avatar-link" title="Perfil">
+      <span class="avatar-letter" id="avatarInitial">?</span>
     </a>
   </div>
 </div>
 
 <!-- LAYOUT -->
-<div class="f-layout">
-  <!-- SIDEBAR with subjects -->
-  <div class="f-sidebar">
-    <div class="f-sidebar-title">Materias</div>
+<div class="q-layout">
+
+  <!-- SIDEBAR — Materias com design estiloso (sem checkbox quadrado) -->
+  <div class="q-sidebar">
+    <div class="q-sidebar-title">Materias</div>
     <div id="sidebarSubjects"></div>
   </div>
 
   <!-- MAIN CONTENT -->
-  <div class="f-main">
-    <div class="f-header">
+  <div class="q-main">
+
+    <div class="q-header">
       <h1>Questoes</h1>
       <p>Filtre questoes de acordo com seu objetivo. Voce pode personalizar sua busca, escolha aqui a experiencia de prova.</p>
     </div>
 
-    <div class="f-filter-tabs">
-      <button class="f-filter-tab active" data-tab="materia">Materia / Assunto</button>
-      <button class="f-filter-tab" data-tab="instituicao">Instituicao</button>
-      <button class="f-filter-tab" data-tab="ano">Ano</button>
-      <button class="f-filter-tab" data-tab="escolaridade">Escolaridade</button>
-      <button class="f-filter-tab" data-tab="posto">Posto/Graduacao</button>
-      <button class="f-filter-tab" data-tab="professor">Professor</button>
-      <button class="f-filter-tab" data-tab="fase">Fase</button>
-      <button class="f-filter-tab" data-tab="duracao">Duracao</button>
-      <button class="f-filter-tab" data-tab="regiao">Regiao</button>
+    <div class="q-filter-tabs">
+      <button class="q-filter-tab active" data-tab="materia">Materia / Assunto</button>
+      <button class="q-filter-tab" data-tab="instituicao">Instituicao</button>
+      <button class="q-filter-tab" data-tab="ano">Ano</button>
+      <button class="q-filter-tab" data-tab="escolaridade">Escolaridade</button>
+      <button class="q-filter-tab" data-tab="posto">Posto/Graduacao</button>
+      <button class="q-filter-tab" data-tab="professor">Professor</button>
+      <button class="q-filter-tab" data-tab="fase">Fase</button>
+      <button class="q-filter-tab" data-tab="duracao">Duracao</button>
+      <button class="q-filter-tab" data-tab="regiao">Regiao</button>
     </div>
 
-    <div class="f-filter-content active" id="tab-materia">
-      <select id="area"><option value="">Selecione uma area</option></select>
-      <select id="assunto" disabled><option value="">Selecione um assunto</option></select>
+    <div class="q-filter-content active" id="tab-materia">
+      <div class="filter-dropdown-group" style="margin-bottom:12px">
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Area</label>
+        <select id="area" style="width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);background:rgba(255,255,255,0.06);color:var(--text-primary);font-size:13px;outline:none;font-family:'Inter',sans-serif;appearance:auto">
+          <option value="">Selecione uma area</option>
+        </select>
+      </div>
+      <div class="filter-dropdown-group">
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Assunto</label>
+        <select id="assunto" disabled style="width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);background:rgba(255,255,255,0.06);color:var(--text-primary);font-size:13px;outline:none;font-family:'Inter',sans-serif;appearance:auto">
+          <option value="">Selecione um assunto</option>
+        </select>
+      </div>
     </div>
-    <div class="f-filter-content" id="tab-instituicao">
-      <input type="text" placeholder="Buscar instituicao..." id="filterInstituicao">
-      <p style="font-size:12px;color:#94a3b8;">Filtro por instituicao disponivel em breve.</p>
+    <div class="q-filter-content" id="tab-instituicao">
+      <p style="font-size:13px;color:var(--text-muted);">Filtro por instituicao disponivel em breve.</p>
     </div>
-    <div class="f-filter-content" id="tab-ano">
-      <input type="text" placeholder="Ex: 2024" id="filterAno">
+    <div class="q-filter-content" id="tab-ano">
+      <p style="font-size:13px;color:var(--text-muted);">Filtro por ano disponivel em breve.</p>
     </div>
-    <div class="f-filter-content" id="tab-escolaridade">
-      <select id="filterEscolaridade"><option value="">Selecione</option><option>Fundamental</option><option>Medio</option><option>Superior</option></select>
+    <div class="q-filter-content" id="tab-escolaridade">
+      <p style="font-size:13px;color:var(--text-muted);">Filtro por escolaridade disponivel em breve.</p>
     </div>
-    <div class="f-filter-content" id="tab-posto">
-      <p style="font-size:12px;color:#94a3b8;">Filtro por posto/graduacao disponivel em breve.</p>
+    <div class="q-filter-content" id="tab-posto">
+      <p style="font-size:13px;color:var(--text-muted);">Filtro por posto/graduacao disponivel em breve.</p>
     </div>
-    <div class="f-filter-content" id="tab-professor">
-      <input type="text" placeholder="Buscar professor..." id="filterProfessor">
+    <div class="q-filter-content" id="tab-professor">
+      <p style="font-size:13px;color:var(--text-muted);">Filtro por professor disponivel em breve.</p>
     </div>
-    <div class="f-filter-content" id="tab-fase">
-      <p style="font-size:12px;color:#94a3b8;">Filtro por fase disponivel em breve.</p>
+    <div class="q-filter-content" id="tab-fase">
+      <p style="font-size:13px;color:var(--text-muted);">Filtro por fase disponivel em breve.</p>
     </div>
-    <div class="f-filter-content" id="tab-duracao">
-      <p style="font-size:12px;color:#94a3b8;">Filtro por duracao disponivel em breve.</p>
+    <div class="q-filter-content" id="tab-duracao">
+      <p style="font-size:13px;color:var(--text-muted);">Filtro por duracao disponivel em breve.</p>
     </div>
-    <div class="f-filter-content" id="tab-regiao">
-      <input type="text" placeholder="Buscar regiao..." id="filterRegiao">
+    <div class="q-filter-content" id="tab-regiao">
+      <p style="font-size:13px;color:var(--text-muted);">Filtro por regiao disponivel em breve.</p>
     </div>
 
-    <div class="f-stats-row">
-      <span class="f-stat"><strong id="materiaCount">0</strong> materias encontradas</span>
-      <span class="f-stat"><strong id="questaoCount">0</strong> questoes encontradas</span>
+    <div class="q-stats-row">
+      <span class="q-stat"><strong id="materiaCount">0</strong> materias encontradas</span>
+      <span class="q-stat"><strong id="questaoCount">0</strong> questoes encontradas</span>
     </div>
 
-    <div class="f-notif-banner">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+    <div class="q-notif-banner">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
       Ja confere os proximos simulados?
     </div>
 
-    <div class="f-start-panel">
+    <div class="q-start-panel">
       <h3>Iniciar questoes</h3>
-      <div class="f-green-tags">
-        <div class="f-green-tag" data-filter="corretoErrado">Correto/errado</div>
-        <div class="f-green-tag" data-filter="multipla">Multipla escolha</div>
-        <div class="f-green-tag" data-filter="jaResolvi">Questoes que ja resolvi</div>
-        <div class="f-green-tag" data-filter="naoResolvi">Questoes que nao resolvi</div>
-        <div class="f-green-tag" data-filter="comVideo">Com solucao em video</div>
-        <div class="f-green-tag" data-filter="semVideo">Sem solucao em video</div>
-        <div class="f-green-tag" data-filter="comTexto">Com solucao por texto</div>
-        <div class="f-green-tag" data-filter="semTexto">Sem solucao por texto</div>
+      <div class="q-filter-tags">
+        <div class="q-filter-tag" data-filter="corretoErrado">Correto/errado</div>
+        <div class="q-filter-tag" data-filter="multipla">Multipla escolha</div>
+        <div class="q-filter-tag" data-filter="jaResolvi">Questoes que ja resolvi</div>
+        <div class="q-filter-tag" data-filter="naoResolvi">Questoes que nao resolvi</div>
+        <div class="q-filter-tag" data-filter="comVideo">Com solucao em video</div>
+        <div class="q-filter-tag" data-filter="semVideo">Sem solucao em video</div>
+        <div class="q-filter-tag" data-filter="comTexto">Com solucao por texto</div>
+        <div class="q-filter-tag" data-filter="semTexto">Sem solucao por texto</div>
       </div>
-      <div class="f-action-row">
-        <button class="f-btn-outline" id="btnCriarLista">Criar lista</button>
-        <button class="f-btn-outline" id="btnCriarSimulado">Criar simulado</button>
-        <button class="f-btn-primary-green" id="btnVerQuestoes">
+      <div class="q-action-row">
+        <button class="btn btn-primary" id="btnVerQuestoes">
           Ver questoes
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </button>
+        <button class="btn btn-secondary" id="btnCriarLista">Criar lista</button>
       </div>
     </div>
+
   </div>
 </div>
+
+<img src="imagem.jpeg" class="floating-logo" alt="Logo">
 
 <script>
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
@@ -300,41 +309,36 @@ checkAuth().then(isAuth => {
   if (isAuth) { renderSidebar(); buscarQuestoes() }
 })
 
+// Render sidebar — design estiloso sem checkbox quadrado
 function renderSidebar() {
   sidebarSubjects.innerHTML = ''
   const materias = Object.keys(MATERIAS_MAP)
   materiaCountEl.textContent = materias.length
+
   materias.forEach(m => {
     const btn = document.createElement('button')
-    btn.className = 'f-sidebar-item' + (selectedMateria === m ? ' active' : '')
-    btn.innerHTML = `<input type="checkbox" ${selectedMateria === m ? 'checked' : ''} id="chk_${m}"><label for="chk_${m}">${m}</label>`
-    btn.addEventListener('click', (e) => {
-      if (e.target.tagName === 'INPUT') return
-      const chk = btn.querySelector('input')
-      chk.checked = !chk.checked
-      handleMateriaChange(m, chk.checked)
+    btn.className = 'q-sidebar-item' + (selectedMateria === m ? ' active' : '')
+    btn.innerHTML = `<span class="check-dot"></span><span>${m}</span>`
+    btn.addEventListener('click', () => {
+      if (selectedMateria === m) {
+        selectedMateria = ''
+      } else {
+        selectedMateria = m
+      }
+      handleMateriaChange()
     })
-    btn.querySelector('input').addEventListener('change', (e) => { handleMateriaChange(m, e.target.checked) })
     sidebarSubjects.appendChild(btn)
   })
 }
 
-function handleMateriaChange(materiaName, checked) {
-  if (checked) {
-    selectedMateria = materiaName
-    areaSelect.innerHTML = '<option value="">Selecione uma area</option>'
-    assuntoSelect.innerHTML = '<option value="">Selecione um assunto</option>'
-    assuntoSelect.disabled = true
-    if (MATERIAS_MAP[materiaName]) {
-      MATERIAS_MAP[materiaName].areas.forEach(areaName => {
-        areaSelect.innerHTML += `<option value="${areaName}">${areaName}</option>`
-      })
-    }
-  } else {
-    selectedMateria = ''
-    areaSelect.innerHTML = '<option value="">Selecione uma area</option>'
-    assuntoSelect.innerHTML = '<option value="">Selecione um assunto</option>'
-    assuntoSelect.disabled = true
+function handleMateriaChange() {
+  areaSelect.innerHTML = '<option value="">Selecione uma area</option>'
+  assuntoSelect.innerHTML = '<option value="">Selecione um assunto</option>'
+  assuntoSelect.disabled = true
+  if (selectedMateria && MATERIAS_MAP[selectedMateria]) {
+    MATERIAS_MAP[selectedMateria].areas.forEach(areaName => {
+      areaSelect.innerHTML += `<option value="${areaName}">${areaName}</option>`
+    })
   }
   renderSidebar()
   buscarQuestoes()
@@ -353,20 +357,22 @@ areaSelect.addEventListener('change', () => {
 
 assuntoSelect.addEventListener('change', () => { buscarQuestoes() })
 
-document.querySelectorAll('.f-filter-tab').forEach(tab => {
+// Filter tabs
+document.querySelectorAll('.q-filter-tab').forEach(tab => {
   tab.addEventListener('click', () => {
-    document.querySelectorAll('.f-filter-tab').forEach(t => t.classList.remove('active'))
-    document.querySelectorAll('.f-filter-content').forEach(c => c.classList.remove('active'))
+    document.querySelectorAll('.q-filter-tab').forEach(t => t.classList.remove('active'))
+    document.querySelectorAll('.q-filter-content').forEach(c => c.classList.remove('active'))
     tab.classList.add('active')
     document.getElementById('tab-' + tab.dataset.tab).classList.add('active')
   })
 })
 
-document.querySelectorAll('.f-green-tag').forEach(tag => {
+// Green/blue filter tags
+document.querySelectorAll('.q-filter-tag').forEach(tag => {
   tag.addEventListener('click', () => {
     const filter = tag.dataset.filter
     if (filter === 'jaResolvi' || filter === 'naoResolvi') {
-      document.querySelectorAll('.f-green-tag[data-filter="jaResolvi"], .f-green-tag[data-filter="naoResolvi"]').forEach(t => t.classList.remove('active'))
+      document.querySelectorAll('.q-filter-tag[data-filter="jaResolvi"], .q-filter-tag[data-filter="naoResolvi"]').forEach(t => t.classList.remove('active'))
       tag.classList.toggle('active')
       activeResolucaoFilter = tag.classList.contains('active') ? filter : 'none'
     } else {
@@ -407,8 +413,8 @@ document.getElementById('btnVerQuestoes').addEventListener('click', () => {
   if (assuntoSelect.value) url.searchParams.set('assunto', assuntoSelect.value)
   window.location.href = url.toString()
 })
+
 document.getElementById('btnCriarLista').addEventListener('click', () => { alert('Funcionalidade em desenvolvimento') })
-document.getElementById('btnCriarSimulado').addEventListener('click', () => { alert('Funcionalidade em desenvolvimento') })
 </script>
 </body>
 </html>
