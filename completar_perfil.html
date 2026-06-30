@@ -18,7 +18,7 @@ body {
   padding: 40px 36px; box-shadow: 0 30px 80px rgba(0,0,0,0.4);
 }
 .cp-card h2 { font-size: 22px; font-weight: 800; color: #0a1628; margin-bottom: 6px; }
-.cp-card .subtitle { font-size: 14px; color: #64748b; margin-bottom: 28px; }
+.cp-card .subtitle { font-size: 14px; color: #64748b; margin-bottom: 28px; line-height: 1.5; }
 .cp-field { margin-bottom: 18px; }
 .cp-field label { display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px; }
 .cp-field label span { color: #2563eb; }
@@ -40,8 +40,8 @@ body {
 </head>
 <body>
 <div class="cp-card">
-  <h2>Completar Perfil</h2>
-  <p class="subtitle">Parece que voce fez login com o Google. Como queremos te chamar?</p>
+  <h2>Quase la!</h2>
+  <p class="subtitle">Como voce quer ser chamado? Escolha seu nome de exibicao para personalizar sua experiencia.</p>
   <form id="completeForm">
     <div class="cp-field">
       <label>Nome de exibicao <span>*</span></label>
@@ -59,7 +59,7 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
   const { data: { user } } = await supabaseClient.auth.getUser()
   if (!user) { window.location.href = 'login.html'; return }
 
-  // If user already has display_name, skip this page
+  // If user already has display_name, go straight to dashboard
   const { data: userData } = await supabaseClient.from('users').select('display_name').eq('id', user.id).single()
   if (userData && userData.display_name) {
     window.location.href = 'dashboard.html'

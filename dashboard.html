@@ -744,6 +744,14 @@ async function logout() {
 (async () => {
   const { data: { user } } = await supabaseClient.auth.getUser()
   if (!user) { window.location.href = 'login.html'; return }
+
+  // Check if user has display_name — redirect to completar_perfil if missing (Google OAuth flow)
+  const { data: userData } = await supabaseClient.from('users').select('display_name').eq('id', user.id).single()
+  if (!userData || !userData.display_name) {
+    window.location.href = 'completar_perfil.html'
+    return
+  }
+
   await verificarAdmin()
   carregarDados()
 })()

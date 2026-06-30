@@ -110,13 +110,6 @@
 .q-stat { font-size: 14px; color: var(--text-secondary); font-weight: 500; }
 .q-stat strong { font-size: 20px; font-weight: 800; color: var(--white); }
 
-/* Notification banner (dark) */
-.q-notif-banner {
-  background: rgba(37,99,235,0.1); border: 1px solid rgba(37,99,235,0.2);
-  border-radius: 10px; padding: 12px 18px; font-size: 13px; color: var(--blue-pale);
-  font-weight: 500; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
-}
-
 /* Start questions panel (dark) */
 .q-start-panel {
   background: linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
@@ -223,38 +216,234 @@
       </div>
     </div>
     <div class="q-filter-content" id="tab-instituicao">
-      <p style="font-size:13px;color:var(--text-muted);">Filtro por instituicao disponivel em breve.</p>
+      <div class="filter-dropdown-group">
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Instituicao Militar</label>
+        <select id="instituicao" style="width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);background:rgba(255,255,255,0.06);color:var(--text-primary);font-size:13px;outline:none;font-family:'Inter',sans-serif;appearance:auto">
+          <option value="">Selecione uma instituicao</option>
+          <optgroup label="Forcas Armadas">
+            <option value="Exercito Brasileiro">Exercito Brasileiro</option>
+            <option value="Marinha do Brasil">Marinha do Brasil</option>
+            <option value="Forca Aerea Brasileira">Forca Aerea Brasileira</option>
+          </optgroup>
+          <optgroup label="Escolas de Formacao — Exercito">
+            <option value="EsPCEx">EsPCEx — Escola Preparatoria de Cadetes do Exercito</option>
+            <option value="ESA">ESA — Escola de Sargentos das Armas</option>
+            <option value="EsSLog">EsSLog — Escola de Sargentos de Logistica</option>
+            <option value="EsFCEx">EsFCEx — Escola de Formacao Complementar do Exercito</option>
+            <option value="IME">IME — Instituto Militar de Engenharia</option>
+          </optgroup>
+          <optgroup label="Escolas de Formacao — Marinha">
+            <option value="Escola Naval">Escola Naval</option>
+            <option value="CPAA-MN">CPAA-MN — Centro de Preparacao de Aspirantes da Armada</option>
+            <option value="EsEG">EsEG — Escola de Engenheiros da Marinha</option>
+            <option value="CIAA">CIAA — Centro de Instrucao Almirante Alexandrino</option>
+          </optgroup>
+          <optgroup label="Escolas de Formacao — Aeronautica">
+            <option value="AFA">AFA — Academia da Forca Aerea</option>
+            <option value="EEAR">EEAR — Escola de Especialistas de Aeronautica</option>
+            <option value="EPCAR">EPCAR — Escola Preparatoria de Cadetes do Ar</option>
+            <option value="ITA">ITA — Instituto Tecnologico de Aeronautica</option>
+          </optgroup>
+          <optgroup label="Forcas Auxiliares">
+            <option value="PM">Policia Militar</option>
+            <option value="CBM">Corpo de Bombeiros Militar</option>
+          </optgroup>
+          <optgroup label="Colegios Militares">
+            <option value="Col Mil SP">Colegio Militar de Sao Paulo</option>
+            <option value="Col Mil RJ">Colegio Militar do Rio de Janeiro</option>
+            <option value="Col Mil BH">Colegio Militar de Belo Horizonte</option>
+            <option value="Col Mil Brasilia">Colegio Militar de Brasilia</option>
+            <option value="Col Mil Pelotas">Colegio Militar de Pelotas</option>
+            <option value="Col Mil Curitiba">Colegio Militar de Curitiba</option>
+            <option value="Col Mil Salvador">Colegio Militar de Salvador</option>
+            <option value="Col Mil Fortaleza">Colegio Militar de Fortaleza</option>
+            <option value="Col Mil Recife">Colegio Militar do Recife</option>
+            <option value="Col Mil Porto Alegre">Colegio Militar de Porto Alegre</option>
+            <option value="Col Mil Manaus">Colegio Militar de Manaus</option>
+            <option value="Col Mil Joao Pessoa">Colegio Militar de Joao Pessoa</option>
+            <option value="Col Mil Santa Maria">Colegio Militar de Santa Maria</option>
+          </optgroup>
+          <optgroup label="Concursos Especiais">
+            <option value="Diploma">Concurso Diploma (QCO)</option>
+            <option value="Fuzileiro Naval">Fuzileiro Naval</option>
+            <option value="Marinheiro">Marinheiro</option>
+            <option value="Soldado Exercito">Soldado do Exercito</option>
+            <option value="Soldado Aeronautica">Soldado da Aeronautica</option>
+          </optgroup>
+        </select>
+      </div>
     </div>
     <div class="q-filter-content" id="tab-ano">
-      <p style="font-size:13px;color:var(--text-muted);">Filtro por ano disponivel em breve.</p>
+      <div class="filter-dropdown-group">
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Ano da Prova</label>
+        <select id="anoProva" style="width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);background:rgba(255,255,255,0.06);color:var(--text-primary);font-size:13px;outline:none;font-family:'Inter',sans-serif;appearance:auto">
+          <option value="">Selecione o ano</option>
+          <option value="2025">2025</option>
+          <option value="2024">2024</option>
+          <option value="2023">2023</option>
+          <option value="2022">2022</option>
+          <option value="2021">2021</option>
+          <option value="2020">2020</option>
+          <option value="2019">2019</option>
+          <option value="2018">2018</option>
+          <option value="2017">2017</option>
+          <option value="2016">2016</option>
+          <option value="2015">2015</option>
+          <option value="2014">2014</option>
+          <option value="2013">2013</option>
+          <option value="2012">2012</option>
+          <option value="2011">2011</option>
+          <option value="2010">2010</option>
+          <option value="2009">2009</option>
+          <option value="2008">2008</option>
+          <option value="2007">2007</option>
+          <option value="2006">2006</option>
+          <option value="2005">2005</option>
+          <option value="2004">2004</option>
+          <option value="2003">2003</option>
+          <option value="2002">2002</option>
+          <option value="2001">2001</option>
+          <option value="2000">2000</option>
+        </select>
+      </div>
     </div>
     <div class="q-filter-content" id="tab-escolaridade">
-      <p style="font-size:13px;color:var(--text-muted);">Filtro por escolaridade disponivel em breve.</p>
+      <div class="filter-dropdown-group">
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Escolaridade</label>
+        <select id="escolaridade" style="width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);background:rgba(255,255,255,0.06);color:var(--text-primary);font-size:13px;outline:none;font-family:'Inter',sans-serif;appearance:auto">
+          <option value="">Selecione a escolaridade</option>
+          <option value="Ensino Fundamental">Ensino Fundamental</option>
+          <option value="Ensino Medio">Ensino Medio</option>
+          <option value="Ensino Superior">Ensino Superior</option>
+        </select>
+      </div>
     </div>
     <div class="q-filter-content" id="tab-posto">
-      <p style="font-size:13px;color:var(--text-muted);">Filtro por posto/graduacao disponivel em breve.</p>
+      <div class="filter-dropdown-group">
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Posto / Graduacao</label>
+        <select id="postoGraduacao" style="width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);background:rgba(255,255,255,0.06);color:var(--text-primary);font-size:13px;outline:none;font-family:'Inter',sans-serif;appearance:auto">
+          <option value="">Selecione o posto/graduacao</option>
+          <optgroup label="Oficiais Generais">
+            <option value="Marechal">Marechal</option>
+            <option value="Almirante">Almirante</option>
+            <option value="Tenente-Brigadeiro">Tenente-Brigadeiro</option>
+            <option value="General-de-Exercito">General-de-Exercito</option>
+            <option value="Almirante-de-Esquadra">Almirante-de-Esquadra</option>
+            <option value="Brigadeiro">Brigadeiro</option>
+            <option value="General-de-Divisao">General-de-Divisao</option>
+            <option value="Vice-Almirante">Vice-Almirante</option>
+            <option value="Major-Brigadeiro">Major-Brigadeiro</option>
+            <option value="General-de-Brigada">General-de-Brigada</option>
+            <option value="Contra-Almirante">Contra-Almirante</option>
+            <option value="Brigadeiro-do-Ar">Brigadeiro-do-Ar</option>
+          </optgroup>
+          <optgroup label="Oficiais Superiores">
+            <option value="Coronel">Coronel</option>
+            <option value="Capitao-de-Mar-e-Guerra">Capitao-de-Mar-e-Guerra</option>
+            <option value="Coronel-Av">Coronel-Aviador</option>
+            <option value="Tenente-Coronel">Tenente-Coronel</option>
+            <option value="Capitao-de-Fragata">Capitao-de-Fragata</option>
+            <option value="Tenente-Coronel-Av">Tenente-Coronel-Aviador</option>
+            <option value="Major">Major</option>
+            <option value="Capitao-de-Corveta">Capitao-de-Corveta</option>
+            <option value="Major-Av">Major-Aviador</option>
+          </optgroup>
+          <optgroup label="Oficiais Intermediarios">
+            <option value="Capitao">Capitao</option>
+            <option value="Capitao-Tenente">Capitao-Tenente</option>
+            <option value="Capitao-Av">Capitao-Aviador</option>
+          </optgroup>
+          <optgroup label="Oficiais Subalternos">
+            <option value="Primeiro-Tenente">1o Tenente</option>
+            <option value="Segundo-Tenente">2o Tenente</option>
+            <option value="Aspirante">Aspirante</option>
+            <option value="Cadete">Cadete</option>
+            <option value="Aspirante-a-Oficial">Aspirante-a-Oficial</option>
+          </optgroup>
+          <optgroup label="Pracas — Exercito">
+            <option value="Subtenente">Subtenente</option>
+            <option value="Primeiro-Sargento">1o Sargento</option>
+            <option value="Segundo-Sargento">2o Sargento</option>
+            <option value="Terceiro-Sargento">3o Sargento</option>
+            <option value="Cabo">Cabo</option>
+            <option value="Soldado">Soldado</option>
+          </optgroup>
+          <optgroup label="Pracas — Marinha">
+            <option value="Suboficial">Suboficial</option>
+            <option value="Primeiro-Mestre">1o Mestre</option>
+            <option value="Segundo-Mestre">2o Mestre</option>
+            <option value="Primeiro-Sargento-MN">1o Sargento</option>
+            <option value="Segundo-Sargento-MN">2o Sargento</option>
+            <option value="Terceiro-Sargento-MN">3o Sargento</option>
+            <option value="Cabo-MN">Cabo</option>
+            <option value="Marinheiro">Marinheiro</option>
+          </optgroup>
+          <optgroup label="Pracas — Aeronautica">
+            <option value="Suboficial-Aer">Suboficial</option>
+            <option value="Primeiro-Sargento-Aer">1o Sargento</option>
+            <option value="Segundo-Sargento-Aer">2o Sargento</option>
+            <option value="Terceiro-Sargento-Aer">3o Sargento</option>
+            <option value="Cabo-Aer">Cabo</option>
+            <option value="Soldado-Aer">Soldado</option>
+          </optgroup>
+        </select>
+      </div>
     </div>
     <div class="q-filter-content" id="tab-professor">
-      <p style="font-size:13px;color:var(--text-muted);">Filtro por professor disponivel em breve.</p>
+      <div class="filter-dropdown-group">
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Professor</label>
+        <input type="text" id="professor" placeholder="Nome do professor" style="width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);background:rgba(255,255,255,0.06);color:var(--text-primary);font-size:13px;outline:none;font-family:'Inter',sans-serif">
+      </div>
     </div>
     <div class="q-filter-content" id="tab-fase">
-      <p style="font-size:13px;color:var(--text-muted);">Filtro por fase disponivel em breve.</p>
+      <div class="filter-dropdown-group">
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Fase</label>
+        <select id="fase" style="width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);background:rgba(255,255,255,0.06);color:var(--text-primary);font-size:13px;outline:none;font-family:'Inter',sans-serif;appearance:auto">
+          <option value="">Selecione a fase</option>
+          <option value="Unica">Prova unica</option>
+          <option value="1a Fase">1a Fase</option>
+          <option value="2a Fase">2a Fase</option>
+          <option value="3a Fase">3a Fase</option>
+          <option value="4a Fase">4a Fase</option>
+          <option value="Eliminatoria">Fase eliminatória</option>
+          <option value="Classificatoria">Fase classificatória</option>
+        </select>
+      </div>
     </div>
     <div class="q-filter-content" id="tab-duracao">
-      <p style="font-size:13px;color:var(--text-muted);">Filtro por duracao disponivel em breve.</p>
+      <div class="filter-dropdown-group">
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Duracao da Prova</label>
+        <select id="duracao" style="width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);background:rgba(255,255,255,0.06);color:var(--text-primary);font-size:13px;outline:none;font-family:'Inter',sans-serif;appearance:auto">
+          <option value="">Selecione a duracao</option>
+          <option value="30">30 minutos</option>
+          <option value="60">1 hora</option>
+          <option value="90">1h30</option>
+          <option value="120">2 horas</option>
+          <option value="150">2h30</option>
+          <option value="180">3 horas</option>
+          <option value="240">4 horas</option>
+          <option value="300">5 horas</option>
+        </select>
+      </div>
     </div>
     <div class="q-filter-content" id="tab-regiao">
-      <p style="font-size:13px;color:var(--text-muted);">Filtro por regiao disponivel em breve.</p>
+      <div class="filter-dropdown-group">
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Regiao</label>
+        <select id="regiao" style="width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);background:rgba(255,255,255,0.06);color:var(--text-primary);font-size:13px;outline:none;font-family:'Inter',sans-serif;appearance:auto">
+          <option value="">Selecione a regiao</option>
+          <option value="Norte">Regiao Norte</option>
+          <option value="Nordeste">Regiao Nordeste</option>
+          <option value="Centro-Oeste">Regiao Centro-Oeste</option>
+          <option value="Sudeste">Regiao Sudeste</option>
+          <option value="Sul">Regiao Sul</option>
+          <option value="Nacional">Nacional</option>
+        </select>
+      </div>
     </div>
 
     <div class="q-stats-row">
       <span class="q-stat"><strong id="materiaCount">0</strong> materias encontradas</span>
       <span class="q-stat"><strong id="questaoCount">0</strong> questoes encontradas</span>
-    </div>
-
-    <div class="q-notif-banner">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-      Ja confere os proximos simulados?
     </div>
 
     <div class="q-start-panel">
@@ -304,6 +493,24 @@ const questaoCountEl = document.getElementById('questaoCount')
 let selectedMateria = ''
 let questoesCache = []
 let activeResolucaoFilter = 'none'
+
+const instituicaoSelect = document.getElementById('instituicao')
+const anoProvaSelect = document.getElementById('anoProva')
+const escolaridadeSelect = document.getElementById('escolaridade')
+const postoGraduacaoSelect = document.getElementById('postoGraduacao')
+const professorInput = document.getElementById('professor')
+const faseSelect = document.getElementById('fase')
+const duracaoSelect = document.getElementById('duracao')
+const regiaoSelect = document.getElementById('regiao')
+
+instituicaoSelect.addEventListener('change', () => { buscarQuestoes() })
+anoProvaSelect.addEventListener('change', () => { buscarQuestoes() })
+escolaridadeSelect.addEventListener('change', () => { buscarQuestoes() })
+postoGraduacaoSelect.addEventListener('change', () => { buscarQuestoes() })
+professorInput.addEventListener('input', () => { buscarQuestoes() })
+faseSelect.addEventListener('change', () => { buscarQuestoes() })
+duracaoSelect.addEventListener('change', () => { buscarQuestoes() })
+regiaoSelect.addEventListener('change', () => { buscarQuestoes() })
 
 checkAuth().then(isAuth => {
   if (isAuth) { renderSidebar(); buscarQuestoes() }
@@ -388,6 +595,14 @@ async function buscarQuestoes() {
     if (selectedMateria) query = query.eq('materia', selectedMateria)
     if (areaSelect.value) query = query.eq('area', areaSelect.value)
     if (assuntoSelect.value) query = query.eq('assunto', assuntoSelect.value)
+    if (instituicaoSelect.value) query = query.eq('instituicao', instituicaoSelect.value)
+    if (anoProvaSelect.value) query = query.eq('ano', anoProvaSelect.value)
+    if (escolaridadeSelect.value) query = query.eq('escolaridade', escolaridadeSelect.value)
+    if (postoGraduacaoSelect.value) query = query.eq('posto_graduacao', postoGraduacaoSelect.value)
+    if (professorInput.value.trim()) query = query.ilike('professor', '%' + professorInput.value.trim() + '%')
+    if (faseSelect.value) query = query.eq('fase', faseSelect.value)
+    if (duracaoSelect.value) query = query.eq('duracao', duracaoSelect.value)
+    if (regiaoSelect.value) query = query.eq('regiao', regiaoSelect.value)
     const { data, error } = await query
     if (error) { questaoCountEl.textContent = '0'; return }
     let filteredData = data || []
@@ -411,6 +626,14 @@ document.getElementById('btnVerQuestoes').addEventListener('click', () => {
   if (selectedMateria) url.searchParams.set('materia', selectedMateria)
   if (areaSelect.value) url.searchParams.set('area', areaSelect.value)
   if (assuntoSelect.value) url.searchParams.set('assunto', assuntoSelect.value)
+  if (instituicaoSelect.value) url.searchParams.set('instituicao', instituicaoSelect.value)
+  if (anoProvaSelect.value) url.searchParams.set('ano', anoProvaSelect.value)
+  if (escolaridadeSelect.value) url.searchParams.set('escolaridade', escolaridadeSelect.value)
+  if (postoGraduacaoSelect.value) url.searchParams.set('posto_graduacao', postoGraduacaoSelect.value)
+  if (professorInput.value.trim()) url.searchParams.set('professor', professorInput.value.trim())
+  if (faseSelect.value) url.searchParams.set('fase', faseSelect.value)
+  if (duracaoSelect.value) url.searchParams.set('duracao', duracaoSelect.value)
+  if (regiaoSelect.value) url.searchParams.set('regiao', regiaoSelect.value)
   window.location.href = url.toString()
 })
 
