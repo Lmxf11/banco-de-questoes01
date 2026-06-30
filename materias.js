@@ -81,5 +81,5 @@ const MATERIAS_MAP = {
 };
 
 // Supabase config compartilhada
-const SUPABASE_URL = 'https://jsmdszcfgvoczkyfzzvu.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzbWRzemNmZ3ZvY3preWZ6enZ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1NDA2MTgsImV4cCI6MjA4MjExNjYxOH0.jsVXgSowIbJJcginBJDliVTJIxY_77-rtsiuM_MbL20';
+const SUPABASE_URL = 'https://mjntpsriejgadxhmbngq.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1qbnRwc3JpZWpnYWR4aG1ibmdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3NTQ1OTgsImV4cCI6MjA5ODMzMDU5OH0.sscVh8R6NLijISkwo6N1BtQEC3uaF312IUzt_C1eyNA';
