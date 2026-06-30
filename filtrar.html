@@ -2,529 +2,329 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Banco de Questões — Mesa de Estudos</title>
+  <title>Questões — Mesa de Estudos</title>
   <link rel="icon" type="image/jpeg" href="imagem.jpeg">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="materias.js"></script>
   <link rel="stylesheet" href="style.css">
-
 <style>
-/* ===== FILTER LAYOUT ===== */
-.filter-layout {
-  display: flex;
-  min-height: calc(100vh - 56px);
-}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+body { min-height: 100vh; background: #fff; color: #1e293b; }
 
-/* ===== LEFT: Filter Panel ===== */
-.filter-panel {
-  width: 340px;
-  background: var(--bg-mid);
-  border-right: 1px solid var(--border);
-  padding: 24px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  flex-shrink: 0;
-  overflow-y: auto;
-}
-
-.filter-panel-title {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--white);
-  margin-bottom: 4px;
-}
-
-.filter-panel-desc {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  margin-bottom: 8px;
-}
-
-/* Search box */
-.filter-search {
-  display: flex;
-  align-items: center;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 10px 14px;
-  gap: 10px;
-  margin-bottom: 4px;
-}
-
-.filter-search svg { width: 16px; height: 16px; color: var(--text-muted); flex-shrink: 0; }
-
-.filter-search input {
-  border: none;
-  background: none;
-  outline: none;
-  font-size: 13px;
-  color: var(--text-primary);
-  width: 100%;
-  font-family: 'Inter', sans-serif;
-}
-
-.filter-search input::placeholder { color: var(--text-muted); }
-
-/* Subject list with checkboxes */
-.subject-section-title {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
-
-.subject-list {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  max-height: 220px;
-  overflow-y: auto;
-}
-
-.subject-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 12px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.subject-item:hover { background: rgba(37,99,235,0.1); }
-.subject-item.selected { background: rgba(37,99,235,0.2); }
-
-.subject-item input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--blue-primary);
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.subject-item label {
-  font-size: 13px;
-  color: var(--text-secondary);
-  cursor: pointer;
-  font-weight: 500;
-  transition: color 0.15s;
-}
-
-.subject-item.selected label { color: var(--blue-pale); font-weight: 600; }
-
-/* Dropdowns in filter panel */
-.filter-dropdown-group {
-  margin-bottom: 12px;
-}
-
-.filter-dropdown-group label {
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 6px;
-}
-
-/* Filter tags */
-.filter-tags-section {
-  margin-top: 4px;
-}
-
-.filter-tags-section h4 {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
-
-.filter-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.filter-tag {
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.05);
-  color: var(--text-secondary);
-  user-select: none;
-}
-
-.filter-tag:hover { background: rgba(37,99,235,0.1); color: var(--blue-pale); }
-.filter-tag.active { background: var(--blue-primary); color: #fff; border-color: var(--blue-primary); }
-
-/* Action buttons at bottom of filter panel */
-.filter-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: auto;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
-}
-
-/* ===== RIGHT: Results Panel ===== */
-.results-panel {
-  flex: 1;
-  padding: 28px 36px;
-  overflow-y: auto;
-}
-
-.results-header {
+/* ===== TOP BAR ===== */
+.f-top-bar {
+  background: #fff;
+  padding: 12px 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-  gap: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
-
-.results-count {
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--white);
+.f-top-bar-left { display: flex; align-items: center; gap: 12px; }
+.f-top-bar-left img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }
+.f-top-bar-left span { font-weight: 700; font-size: 15px; color: #0f172a; }
+.f-top-bar-right { display: flex; align-items: center; gap: 16px; }
+.f-top-bar-right .icon-btn {
+  width: 36px; height: 36px; border-radius: 50%; border: none; background: #f1f5f9;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: #64748b; position: relative; transition: background 0.15s;
 }
-
-.results-count .sub {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-secondary);
+.f-top-bar-right .icon-btn:hover { background: #e2e8f0; }
+.f-top-bar-right .icon-btn svg { width: 18px; height: 18px; }
+.f-top-bar-right .notif-dot {
+  position: absolute; top: 6px; right: 6px; width: 8px; height: 8px;
+  background: #ef4444; border-radius: 50%; border: 2px solid #fff;
 }
-
-/* Applied filter pills */
-.applied-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 20px;
+.f-top-bar-right .avatar-btn {
+  width: 36px; height: 36px; border-radius: 50%; border: 2px solid #10b981;
+  background: #d1fae5; cursor: pointer; display: flex; align-items: center;
+  justify-content: center; overflow: hidden; text-decoration: none;
 }
+.f-top-bar-right .avatar-btn:hover { border-color: #059669; }
+.f-top-bar-right .avatar-initial { font-weight: 700; font-size: 14px; color: #059669; }
 
-.applied-pill {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  background: rgba(37,99,235,0.15);
-  color: var(--blue-pale);
-  border: 1px solid rgba(37,99,235,0.25);
-  cursor: pointer;
-  transition: all 0.15s;
+/* ===== LAYOUT ===== */
+.f-layout { display: flex; min-height: calc(100vh - 56px); }
+
+/* ===== SIDEBAR ===== */
+.f-sidebar {
+  width: 220px; background: #f8fafc; border-right: 1px solid #e2e8f0;
+  padding: 20px 12px; display: flex; flex-direction: column; gap: 2px;
+  flex-shrink: 0; overflow-y: auto;
 }
-
-.applied-pill:hover { background: rgba(37,99,235,0.25); }
-.applied-pill svg { width: 12px; height: 12px; }
-
-/* Results list */
-.results-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.f-sidebar-title {
+  font-size: 11px; font-weight: 700; color: #94a3b8;
+  text-transform: uppercase; letter-spacing: 1px; padding: 8px 12px 10px;
 }
-
-.result-card {
-  background: linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  padding: 20px 24px;
-  transition: all 0.2s;
-  cursor: pointer;
+.f-sidebar-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  border-radius: 8px; cursor: pointer; transition: all 0.15s;
+  border: none; background: none; width: 100%; text-align: left;
+  font-size: 13.5px; font-weight: 500; color: #475569;
 }
+.f-sidebar-item:hover { background: #e2e8f0; color: #0f172a; }
+.f-sidebar-item.active { background: #0d9488; color: #fff; font-weight: 600; }
+.f-sidebar-item input[type="checkbox"] { width: 16px; height: 16px; accent-color: #0d9488; cursor: pointer; flex-shrink: 0; }
+.f-sidebar-item label { cursor: pointer; font-size: 13.5px; }
 
-.result-card:hover {
-  border-color: rgba(37,99,235,0.3);
-  background: linear-gradient(160deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
+/* ===== MAIN CONTENT ===== */
+.f-main { flex: 1; padding: 28px 32px; overflow-y: auto; background: #fff; }
+.f-header { margin-bottom: 24px; }
+.f-header h1 { font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+.f-header p { font-size: 14px; color: #64748b; line-height: 1.5; }
+
+/* Filter tabs */
+.f-filter-tabs { display: flex; gap: 0; border-bottom: 2px solid #e2e8f0; margin-bottom: 20px; overflow-x: auto; }
+.f-filter-tab {
+  padding: 10px 18px; font-size: 13px; font-weight: 500; color: #64748b;
+  border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent;
+  margin-bottom: -2px; white-space: nowrap; transition: all 0.15s;
 }
+.f-filter-tab:hover { color: #0d9488; }
+.f-filter-tab.active { color: #0d9488; border-bottom-color: #0d9488; font-weight: 600; }
 
-.result-card-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
+.f-filter-content { display: none; margin-bottom: 20px; }
+.f-filter-content.active { display: block; }
+.f-filter-content select, .f-filter-content input[type="text"] {
+  width: 100%; padding: 10px 14px; border-radius: 8px; border: 1.5px solid #e2e8f0;
+  background: #f8fafc; color: #0f172a; font-size: 13px; outline: none;
+  transition: all 0.15s; margin-bottom: 10px; font-family: 'Inter', sans-serif;
 }
-
-.result-card-num {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--blue-primary);
-  background: rgba(37,99,235,0.15);
-  padding: 2px 8px;
-  border-radius: 4px;
+.f-filter-content select:focus, .f-filter-content input[type="text"]:focus {
+  border-color: #0d9488; box-shadow: 0 0 0 3px rgba(13,148,136,0.1);
 }
+.f-filter-content select { appearance: auto; }
 
-.result-card-meta {
-  font-size: 12px;
-  color: var(--text-secondary);
+/* Stats row */
+.f-stats-row { display: flex; gap: 24px; margin-bottom: 24px; align-items: center; }
+.f-stat { font-size: 14px; color: #475569; font-weight: 500; }
+.f-stat strong { font-size: 18px; font-weight: 800; color: #0f172a; }
+
+/* Start questions panel */
+.f-start-panel {
+  background: #f0fdfa; border: 1.5px solid #ccfbf1;
+  border-radius: 14px; padding: 24px 28px; margin-bottom: 24px;
 }
+.f-start-panel h3 { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 14px; }
 
-.result-card-text {
-  font-size: 14px;
-  color: var(--text-primary);
-  line-height: 1.6;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+/* Green filter tags */
+.f-green-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.f-green-tag {
+  padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s; background: #d1fae5; color: #065f46;
+  border: 1px solid #a7f3d0; user-select: none; display: flex; align-items: center; gap: 5px;
 }
+.f-green-tag:hover { background: #a7f3d0; }
+.f-green-tag.active { background: #0d9488; color: #fff; border-color: #0d9488; }
 
-.result-card-footer {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-  flex-wrap: wrap;
+/* Action buttons row */
+.f-action-row { display: flex; gap: 10px; align-items: center; }
+.f-btn-outline {
+  padding: 10px 22px; border-radius: 10px; border: 1.5px solid #d1d5db;
+  background: #fff; color: #374151; font-weight: 600; font-size: 13px;
+  cursor: pointer; transition: all 0.15s;
 }
-
-.result-tag {
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  background: rgba(255,255,255,0.06);
-  color: var(--text-muted);
-  border: 1px solid var(--border);
+.f-btn-outline:hover { background: #f9fafb; border-color: #9ca3af; }
+.f-btn-primary-green {
+  padding: 10px 28px; border-radius: 10px; border: none; background: #0d9488;
+  color: #fff; font-weight: 700; font-size: 14px; cursor: pointer;
+  transition: all 0.15s; display: inline-flex; align-items: center; gap: 8px;
 }
+.f-btn-primary-green:hover { background: #0f766e; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(13,148,136,0.3); }
+.f-btn-primary-green svg { width: 16px; height: 16px; }
 
-/* Empty results */
-.no-results {
-  text-align: center;
-  padding: 60px 20px;
+/* Notification banner */
+.f-notif-banner {
+  background: #f0fdfa; border: 1px solid #a7f3d0; border-radius: 10px;
+  padding: 12px 18px; font-size: 13px; color: #065f46; font-weight: 500;
+  margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
 }
-
-.no-results svg { width: 64px; height: 64px; color: var(--text-muted); margin-bottom: 16px; }
-.no-results h3 { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
-.no-results p { font-size: 14px; color: var(--text-secondary); }
-
-/* Pagination */
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 24px;
-}
-
-.page-btn {
-  padding: 8px 14px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.05);
-  color: var(--text-secondary);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.page-btn:hover { background: rgba(37,99,235,0.15); color: var(--blue-pale); }
-.page-btn.active { background: var(--blue-primary); color: #fff; border-color: var(--blue-primary); }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 900px) {
-  .filter-layout { flex-direction: column; }
-  .filter-panel { width: 100%; border-right: none; border-bottom: 1px solid var(--border); max-height: 400px; }
-  .results-panel { padding: 20px 16px; }
+  .f-layout { flex-direction: column; }
+  .f-sidebar { width: 100%; flex-direction: row; overflow-x: auto; padding: 12px; border-right: none; border-bottom: 1px solid #e2e8f0; }
+  .f-sidebar-title { display: none; }
+  .f-sidebar-item { padding: 8px 14px; white-space: nowrap; }
+  .f-main { padding: 20px 16px; }
 }
-
 @media (max-width: 600px) {
-  .top-bar { flex-direction: column; gap: 8px; }
-  .results-header { flex-direction: column; align-items: flex-start; }
+  .f-top-bar { padding: 10px 14px; }
+  .f-header h1 { font-size: 20px; }
+  .f-action-row { flex-direction: column; }
+  .f-action-row button { width: 100%; }
 }
 </style>
 <script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
 </head>
-
 <body>
 
 <!-- TOP BAR -->
-<div class="top-bar">
-  <div class="top-bar-left">
-    <img src="imagem.jpeg" class="logo-circle" alt="Logo">
+<div class="f-top-bar">
+  <div class="f-top-bar-left">
+    <img src="imagem.jpeg" alt="Logo">
     <span>Mesa de Estudos</span>
   </div>
-  <div class="top-bar-right">
-    <a href="dashboard.html" class="btn-bar">Desempenho</a>
-    <a href="materiais.html" class="btn-bar">Materiais</a>
+  <div class="f-top-bar-right">
+    <button class="icon-btn" title="Favoritos" onclick="alert('Em desenvolvimento')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </button>
+    <button class="icon-btn" title="Notificacoes" onclick="alert('Em desenvolvimento')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="notif-dot"></span>
+    </button>
+    <a href="perfil.html" class="avatar-btn" title="Perfil">
+      <span class="avatar-initial" id="avatarInitial">?</span>
+    </a>
   </div>
 </div>
 
-<div class="filter-layout">
-
-  <!-- LEFT: Filter Panel -->
-  <div class="filter-panel">
-    <div>
-      <div class="filter-panel-title">Filtrar Questões</div>
-      <p class="filter-panel-desc">Selecione os critérios para encontrar as questões que deseja resolver.</p>
-    </div>
-
-    <div class="filter-search">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input type="text" id="searchMateria" placeholder="Buscar matérias...">
-    </div>
-
-    <div>
-      <div class="subject-section-title">Matérias</div>
-      <div class="subject-list" id="subjectList"></div>
-    </div>
-
-    <div class="filter-dropdown-group">
-      <label>Área</label>
-      <select id="area" disabled>
-        <option value="">Selecione uma área</option>
-      </select>
-    </div>
-
-    <div class="filter-dropdown-group">
-      <label>Assunto</label>
-      <select id="assunto" disabled>
-        <option value="">Selecione um assunto</option>
-      </select>
-    </div>
-
-    <div class="filter-tags-section">
-      <h4>Tipo de questão</h4>
-      <div class="filter-tags">
-        <div class="filter-tag active" data-filter="resolucao">Com resolução</div>
-        <div class="filter-tag" data-filter="multipla">Múltipla escolha</div>
-        <div class="filter-tag" data-filter="jaResolvi">Já resolvi</div>
-        <div class="filter-tag" data-filter="naoResolvi">Não resolvi</div>
-      </div>
-    </div>
-
-    <div class="filter-actions">
-      <button class="btn btn-primary" id="btnVerQuestoes" style="width:100%">Ver questões</button>
-      <button class="btn btn-secondary" id="btnCriarLista" style="width:100%">Criar lista</button>
-      <button class="btn btn-secondary" id="btnCriarSimulado" style="width:100%">Criar simulado</button>
-    </div>
+<!-- LAYOUT -->
+<div class="f-layout">
+  <!-- SIDEBAR with subjects -->
+  <div class="f-sidebar">
+    <div class="f-sidebar-title">Materias</div>
+    <div id="sidebarSubjects"></div>
   </div>
 
-  <!-- RIGHT: Results Panel -->
-  <div class="results-panel">
-    <div class="results-header">
-      <div class="results-count">
-        <span id="questaoCount">0</span> <span class="sub">questões encontradas</span>
+  <!-- MAIN CONTENT -->
+  <div class="f-main">
+    <div class="f-header">
+      <h1>Questoes</h1>
+      <p>Filtre questoes de acordo com seu objetivo. Voce pode personalizar sua busca, escolha aqui a experiencia de prova.</p>
+    </div>
+
+    <div class="f-filter-tabs">
+      <button class="f-filter-tab active" data-tab="materia">Materia / Assunto</button>
+      <button class="f-filter-tab" data-tab="instituicao">Instituicao</button>
+      <button class="f-filter-tab" data-tab="ano">Ano</button>
+      <button class="f-filter-tab" data-tab="escolaridade">Escolaridade</button>
+      <button class="f-filter-tab" data-tab="posto">Posto/Graduacao</button>
+      <button class="f-filter-tab" data-tab="professor">Professor</button>
+      <button class="f-filter-tab" data-tab="fase">Fase</button>
+      <button class="f-filter-tab" data-tab="duracao">Duracao</button>
+      <button class="f-filter-tab" data-tab="regiao">Regiao</button>
+    </div>
+
+    <div class="f-filter-content active" id="tab-materia">
+      <select id="area"><option value="">Selecione uma area</option></select>
+      <select id="assunto" disabled><option value="">Selecione um assunto</option></select>
+    </div>
+    <div class="f-filter-content" id="tab-instituicao">
+      <input type="text" placeholder="Buscar instituicao..." id="filterInstituicao">
+      <p style="font-size:12px;color:#94a3b8;">Filtro por instituicao disponivel em breve.</p>
+    </div>
+    <div class="f-filter-content" id="tab-ano">
+      <input type="text" placeholder="Ex: 2024" id="filterAno">
+    </div>
+    <div class="f-filter-content" id="tab-escolaridade">
+      <select id="filterEscolaridade"><option value="">Selecione</option><option>Fundamental</option><option>Medio</option><option>Superior</option></select>
+    </div>
+    <div class="f-filter-content" id="tab-posto">
+      <p style="font-size:12px;color:#94a3b8;">Filtro por posto/graduacao disponivel em breve.</p>
+    </div>
+    <div class="f-filter-content" id="tab-professor">
+      <input type="text" placeholder="Buscar professor..." id="filterProfessor">
+    </div>
+    <div class="f-filter-content" id="tab-fase">
+      <p style="font-size:12px;color:#94a3b8;">Filtro por fase disponivel em breve.</p>
+    </div>
+    <div class="f-filter-content" id="tab-duracao">
+      <p style="font-size:12px;color:#94a3b8;">Filtro por duracao disponivel em breve.</p>
+    </div>
+    <div class="f-filter-content" id="tab-regiao">
+      <input type="text" placeholder="Buscar regiao..." id="filterRegiao">
+    </div>
+
+    <div class="f-stats-row">
+      <span class="f-stat"><strong id="materiaCount">0</strong> materias encontradas</span>
+      <span class="f-stat"><strong id="questaoCount">0</strong> questoes encontradas</span>
+    </div>
+
+    <div class="f-notif-banner">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      Ja confere os proximos simulados?
+    </div>
+
+    <div class="f-start-panel">
+      <h3>Iniciar questoes</h3>
+      <div class="f-green-tags">
+        <div class="f-green-tag" data-filter="corretoErrado">Correto/errado</div>
+        <div class="f-green-tag" data-filter="multipla">Multipla escolha</div>
+        <div class="f-green-tag" data-filter="jaResolvi">Questoes que ja resolvi</div>
+        <div class="f-green-tag" data-filter="naoResolvi">Questoes que nao resolvi</div>
+        <div class="f-green-tag" data-filter="comVideo">Com solucao em video</div>
+        <div class="f-green-tag" data-filter="semVideo">Sem solucao em video</div>
+        <div class="f-green-tag" data-filter="comTexto">Com solucao por texto</div>
+        <div class="f-green-tag" data-filter="semTexto">Sem solucao por texto</div>
+      </div>
+      <div class="f-action-row">
+        <button class="f-btn-outline" id="btnCriarLista">Criar lista</button>
+        <button class="f-btn-outline" id="btnCriarSimulado">Criar simulado</button>
+        <button class="f-btn-primary-green" id="btnVerQuestoes">
+          Ver questoes
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
       </div>
     </div>
-
-    <div class="applied-filters" id="appliedFilters"></div>
-
-    <div class="results-list" id="resultsList">
-      <!-- Dynamically populated -->
-    </div>
-
-    <p class="msg" id="msg" style="display:none; text-align:center; padding:20px;"></p>
   </div>
-
 </div>
-
-<img src="imagem.jpeg" class="floating-logo" alt="Logo">
 
 <script>
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
-// Auth guard
 async function checkAuth() {
   const { data: { user } } = await supabaseClient.auth.getUser()
-  if (!user) {
-    window.location.href = 'login.html'
-    return false
-  }
+  if (!user) { window.location.href = 'login.html'; return false }
+  const { data: userData } = await supabaseClient.from('users').select('display_name, email').eq('id', user.id).single()
+  const name = (userData?.display_name || userData?.email || '?')
+  document.getElementById('avatarInitial').textContent = name.charAt(0).toUpperCase()
   return true
 }
 
-// Check admin status for sidebar — use users table (consistent with dashboard)
-async function verificarAdmin() {
-  const { data: { user } } = await supabaseClient.auth.getUser()
-  if (!user) return
-  const { data: userData } = await supabaseClient
-    .from('users')
-    .select('role')
-    .eq('id', user.id)
-    .single()
-  if (userData && userData.role === 'admin') {
-    document.querySelectorAll('.admin-only').forEach(el => el.classList.add('show'))
-  }
-}
-
-// Elements (must be declared before use)
 const areaSelect = document.getElementById('area')
 const assuntoSelect = document.getElementById('assunto')
-const subjectList = document.getElementById('subjectList')
-const searchMateria = document.getElementById('searchMateria')
-const questaoCount = document.getElementById('questaoCount')
-const resultsList = document.getElementById('resultsList')
-const appliedFilters = document.getElementById('appliedFilters')
-const msg = document.getElementById('msg')
+const sidebarSubjects = document.getElementById('sidebarSubjects')
+const materiaCountEl = document.getElementById('materiaCount')
+const questaoCountEl = document.getElementById('questaoCount')
 
 let selectedMateria = ''
 let questoesCache = []
+let activeResolucaoFilter = 'none'
 
-// Auth check — run after DOM elements are declared
 checkAuth().then(isAuth => {
-  if (isAuth) {
-    verificarAdmin()
-    renderSubjectList()
-    buscarQuestoes()
-  }
+  if (isAuth) { renderSidebar(); buscarQuestoes() }
 })
 
-// Render subject list
-function renderSubjectList(filter = '') {
-  subjectList.innerHTML = ''
+function renderSidebar() {
+  sidebarSubjects.innerHTML = ''
   const materias = Object.keys(MATERIAS_MAP)
-  const filtered = filter
-    ? materias.filter(m => m.toLowerCase().includes(filter.toLowerCase()))
-    : materias
-
-  filtered.forEach(m => {
-    const item = document.createElement('div')
-    item.className = 'subject-item' + (selectedMateria === m ? ' selected' : '')
-    item.innerHTML = `
-      <input type="checkbox" id="chk_${m}" ${selectedMateria === m ? 'checked' : ''}>
-      <label for="chk_${m}">${m}</label>
-    `
-    item.addEventListener('click', (e) => {
+  materiaCountEl.textContent = materias.length
+  materias.forEach(m => {
+    const btn = document.createElement('button')
+    btn.className = 'f-sidebar-item' + (selectedMateria === m ? ' active' : '')
+    btn.innerHTML = `<input type="checkbox" ${selectedMateria === m ? 'checked' : ''} id="chk_${m}"><label for="chk_${m}">${m}</label>`
+    btn.addEventListener('click', (e) => {
       if (e.target.tagName === 'INPUT') return
-      const chk = item.querySelector('input')
+      const chk = btn.querySelector('input')
       chk.checked = !chk.checked
       handleMateriaChange(m, chk.checked)
     })
-    item.querySelector('input').addEventListener('change', (e) => {
-      handleMateriaChange(m, e.target.checked)
-    })
-    subjectList.appendChild(item)
+    btn.querySelector('input').addEventListener('change', (e) => { handleMateriaChange(m, e.target.checked) })
+    sidebarSubjects.appendChild(btn)
   })
 }
 
 function handleMateriaChange(materiaName, checked) {
   if (checked) {
-    // Single-select: uncheck all others, only this one stays checked
     selectedMateria = materiaName
-    areaSelect.innerHTML = '<option value="">Selecione uma área</option>'
+    areaSelect.innerHTML = '<option value="">Selecione uma area</option>'
     assuntoSelect.innerHTML = '<option value="">Selecione um assunto</option>'
     assuntoSelect.disabled = true
-    areaSelect.disabled = false
-
     if (MATERIAS_MAP[materiaName]) {
       MATERIAS_MAP[materiaName].areas.forEach(areaName => {
         areaSelect.innerHTML += `<option value="${areaName}">${areaName}</option>`
@@ -532,181 +332,74 @@ function handleMateriaChange(materiaName, checked) {
     }
   } else {
     selectedMateria = ''
-    areaSelect.innerHTML = '<option value="">Selecione uma área</option>'
+    areaSelect.innerHTML = '<option value="">Selecione uma area</option>'
     assuntoSelect.innerHTML = '<option value="">Selecione um assunto</option>'
-    areaSelect.disabled = true
     assuntoSelect.disabled = true
   }
-  renderSubjectList(searchMateria.value)
-  updateAppliedFilters()
+  renderSidebar()
   buscarQuestoes()
 }
-
-searchMateria.addEventListener('input', () => { renderSubjectList(searchMateria.value) })
 
 areaSelect.addEventListener('change', () => {
   assuntoSelect.innerHTML = '<option value="">Selecione um assunto</option>'
   assuntoSelect.disabled = true
-  if (!selectedMateria || !areaSelect.value) { updateAppliedFilters(); buscarQuestoes(); return }
-
+  if (!selectedMateria || !areaSelect.value) { buscarQuestoes(); return }
   const assuntos = MATERIAS_MAP[selectedMateria]?.assuntos?.[areaSelect.value]
-  if (!assuntos || !Array.isArray(assuntos)) { updateAppliedFilters(); buscarQuestoes(); return }
-
+  if (!assuntos || !Array.isArray(assuntos)) { buscarQuestoes(); return }
   assuntoSelect.disabled = false
   assuntos.forEach(nome => { assuntoSelect.innerHTML += `<option value="${nome}">${nome}</option>` })
-  updateAppliedFilters()
   buscarQuestoes()
 })
 
-assuntoSelect.addEventListener('change', () => { updateAppliedFilters(); buscarQuestoes() })
+assuntoSelect.addEventListener('change', () => { buscarQuestoes() })
 
-function updateAppliedFilters() {
-  appliedFilters.innerHTML = ''
-  if (selectedMateria) {
-    appliedFilters.innerHTML += `<span class="applied-pill" onclick="clearFilter('materia')">${selectedMateria} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg></span>`
-  }
-  if (areaSelect.value) {
-    appliedFilters.innerHTML += `<span class="applied-pill" onclick="clearFilter('area')">${areaSelect.value} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg></span>`
-  }
-  if (assuntoSelect.value) {
-    appliedFilters.innerHTML += `<span class="applied-pill" onclick="clearFilter('assunto')">${assuntoSelect.value} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg></span>`
-  }
-}
-
-function clearFilter(type) {
-  if (type === 'materia') {
-    selectedMateria = ''
-    areaSelect.innerHTML = '<option value="">Selecione uma área</option>'
-    areaSelect.disabled = true
-    assuntoSelect.innerHTML = '<option value="">Selecione um assunto</option>'
-    assuntoSelect.disabled = true
-    renderSubjectList(searchMateria.value)
-  } else if (type === 'area') {
-    areaSelect.value = ''
-    assuntoSelect.innerHTML = '<option value="">Selecione um assunto</option>'
-    assuntoSelect.disabled = true
-  } else if (type === 'assunto') {
-    assuntoSelect.value = ''
-  }
-  updateAppliedFilters()
-  buscarQuestoes()
-}
-
-// Fetch questions
-async function buscarQuestoes() {
-  msg.style.display = 'none'
-  
-  try {
-    let query = supabaseClient.from('questoes').select('*')
-
-    if (selectedMateria) query = query.eq('materia', selectedMateria)
-    if (areaSelect.value) query = query.eq('area', areaSelect.value)
-    if (assuntoSelect.value) query = query.eq('assunto', assuntoSelect.value)
-
-    const { data, error } = await query
-
-    if (error) {
-      questaoCount.textContent = '0'
-      resultsList.innerHTML = ''
-      msg.style.display = 'block'
-      msg.className = 'msg msg-error'
-      msg.textContent = 'Erro ao buscar questões: ' + (error.message || '')
-      return
-    }
-
-    let filteredData = data || []
-
-    // Apply resolution status filter (jaResolvi / naoResolvi)
-    if (activeResolucaoFilter === 'jaResolvi' || activeResolucaoFilter === 'naoResolvi') {
-      const { data: { user } } = await supabaseClient.auth.getUser()
-      if (user && filteredData.length > 0) {
-        const questaoIds = filteredData.map(q => q.id)
-        const { data: respostasUser } = await supabaseClient
-          .from('respostas')
-          .select('questao_id')
-          .eq('user_id', user.id)
-          .in('questao_id', questaoIds)
-
-        const resolvedIds = new Set((respostasUser || []).map(r => r.questao_id))
-
-        if (activeResolucaoFilter === 'jaResolvi') {
-          filteredData = filteredData.filter(q => resolvedIds.has(q.id))
-        } else {
-          filteredData = filteredData.filter(q => !resolvedIds.has(q.id))
-        }
-      } else if (activeResolucaoFilter === 'jaResolvi') {
-        filteredData = [] // No user = no resolved questions
-      }
-    }
-
-    questoesCache = filteredData
-    questaoCount.textContent = questoesCache.length
-    renderResults()
-  } catch (e) {
-    questaoCount.textContent = '0'
-    resultsList.innerHTML = ''
-    msg.style.display = 'block'
-    msg.className = 'msg msg-error'
-    msg.textContent = 'Erro de conexão ao buscar questões'
-    console.error('buscarQuestoes error:', e)
-  }
-}
-
-function renderResults() {
-  resultsList.innerHTML = ''
-
-  if (questoesCache.length === 0) {
-    resultsList.innerHTML = `
-      <div class="no-results">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        <h3>Nenhuma questão encontrada</h3>
-        <p>Tente alterar os filtros para encontrar questões disponíveis</p>
-      </div>`
-    return
-  }
-
-  questoesCache.forEach((q, i) => {
-    const card = document.createElement('div')
-    card.className = 'result-card'
-    card.innerHTML = `
-      <div class="result-card-header">
-        <span class="result-card-num">Q${i + 1}</span>
-        <span class="result-card-meta">${q.materia} • ${q.area} • ${q.assunto}</span>
-      </div>
-      <div class="result-card-text">${q.enunciado}</div>
-      <div class="result-card-footer">
-        <span class="result-tag">${q.materia}</span>
-        <span class="result-tag">${q.area}</span>
-      </div>
-    `
-    card.addEventListener('click', () => {
-      // Navigate to questoes.html with URL params (FIX: pass filters via URL)
-      const url = new URL('questoes.html', window.location.origin)
-      if (selectedMateria) url.searchParams.set('materia', selectedMateria)
-      if (areaSelect.value) url.searchParams.set('area', areaSelect.value)
-      if (assuntoSelect.value) url.searchParams.set('assunto', assuntoSelect.value)
-      // Start at this specific question
-      url.searchParams.set('start', i)
-      window.location.href = url.toString()
-    })
-    resultsList.appendChild(card)
+document.querySelectorAll('.f-filter-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.f-filter-tab').forEach(t => t.classList.remove('active'))
+    document.querySelectorAll('.f-filter-content').forEach(c => c.classList.remove('active'))
+    tab.classList.add('active')
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active')
   })
-}
+})
 
-// Filter tags - mutually exclusive for resolution status
-let activeResolucaoFilter = 'resolucao' // default
-document.querySelectorAll('.filter-tag').forEach(tag => {
+document.querySelectorAll('.f-green-tag').forEach(tag => {
   tag.addEventListener('click', () => {
-    // Remove active from all filter tags
-    document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'))
-    // Activate only the clicked one
-    tag.classList.add('active')
-    activeResolucaoFilter = tag.dataset.filter
+    const filter = tag.dataset.filter
+    if (filter === 'jaResolvi' || filter === 'naoResolvi') {
+      document.querySelectorAll('.f-green-tag[data-filter="jaResolvi"], .f-green-tag[data-filter="naoResolvi"]').forEach(t => t.classList.remove('active'))
+      tag.classList.toggle('active')
+      activeResolucaoFilter = tag.classList.contains('active') ? filter : 'none'
+    } else {
+      tag.classList.toggle('active')
+    }
     buscarQuestoes()
   })
 })
 
-// Action buttons — FIX: Pass filters via URL params instead of localStorage
+async function buscarQuestoes() {
+  try {
+    let query = supabaseClient.from('questoes').select('*')
+    if (selectedMateria) query = query.eq('materia', selectedMateria)
+    if (areaSelect.value) query = query.eq('area', areaSelect.value)
+    if (assuntoSelect.value) query = query.eq('assunto', assuntoSelect.value)
+    const { data, error } = await query
+    if (error) { questaoCountEl.textContent = '0'; return }
+    let filteredData = data || []
+    if (activeResolucaoFilter === 'jaResolvi' || activeResolucaoFilter === 'naoResolvi') {
+      const { data: { user } } = await supabaseClient.auth.getUser()
+      if (user && filteredData.length > 0) {
+        const ids = filteredData.map(q => q.id)
+        const { data: respostasUser } = await supabaseClient.from('respostas').select('questao_id').eq('user_id', user.id).in('questao_id', ids)
+        const resolvedIds = new Set((respostasUser || []).map(r => r.questao_id))
+        if (activeResolucaoFilter === 'jaResolvi') filteredData = filteredData.filter(q => resolvedIds.has(q.id))
+        else filteredData = filteredData.filter(q => !resolvedIds.has(q.id))
+      } else if (activeResolucaoFilter === 'jaResolvi') { filteredData = [] }
+    }
+    questoesCache = filteredData
+    questaoCountEl.textContent = questoesCache.length.toLocaleString('pt-BR')
+  } catch (e) { console.error('buscarQuestoes error:', e); questaoCountEl.textContent = '0' }
+}
+
 document.getElementById('btnVerQuestoes').addEventListener('click', () => {
   const url = new URL('questoes.html', window.location.origin)
   if (selectedMateria) url.searchParams.set('materia', selectedMateria)
@@ -714,16 +407,8 @@ document.getElementById('btnVerQuestoes').addEventListener('click', () => {
   if (assuntoSelect.value) url.searchParams.set('assunto', assuntoSelect.value)
   window.location.href = url.toString()
 })
-
-document.getElementById('btnCriarLista').addEventListener('click', () => {
-  alert('Funcionalidade em desenvolvimento')
-})
-
-document.getElementById('btnCriarSimulado').addEventListener('click', () => {
-  alert('Funcionalidade em desenvolvimento')
-})
-
-// Init already called after auth check above
+document.getElementById('btnCriarLista').addEventListener('click', () => { alert('Funcionalidade em desenvolvimento') })
+document.getElementById('btnCriarSimulado').addEventListener('click', () => { alert('Funcionalidade em desenvolvimento') })
 </script>
 </body>
 </html>

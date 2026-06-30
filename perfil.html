@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Meu Perfil — Mesa de Estudos</title>
+  <link rel="icon" type="image/jpeg" href="imagem.jpeg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="materias.js"></script>
+  <link rel="stylesheet" href="style.css">
+<style>
+.p-page { max-width: 640px; margin: 0 auto; padding: 40px 24px; }
+
+.p-page h1 { font-size: 24px; font-weight: 800; color: var(--white); margin-bottom: 6px; }
+.p-page .subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 32px; }
+
+/* Avatar section */
+.p-avatar-section {
+  display: flex; align-items: center; gap: 20px;
+  margin-bottom: 32px; padding: 24px;
+  background: linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+  border-radius: var(--radius-xl); border: 1px solid var(--border);
+}
+.p-avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: var(--blue-primary); display: flex; align-items: center;
+  justify-content: center; font-size: 32px; font-weight: 800; color: #fff;
+  overflow: hidden; flex-shrink: 0; position: relative;
+}
+.p-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.p-avatar-info { flex: 1; }
+.p-avatar-info .name { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+.p-avatar-info .email { font-size: 13px; color: var(--text-muted); margin-bottom: 10px; }
+.p-avatar-btns { display: flex; gap: 8px; }
+.p-btn-sm {
+  padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s; border: none;
+}
+.p-btn-sm.upload { background: var(--blue-primary); color: #fff; }
+.p-btn-sm.upload:hover { background: var(--blue-hover); }
+.p-btn-sm.remove { background: rgba(255,255,255,0.1); color: var(--text-secondary); border: 1px solid var(--border); }
+.p-btn-sm.remove:hover { background: rgba(239,68,68,0.15); color: var(--error); }
+input[type="file"] { display: none; }
+
+/* Form */
+.p-form { display: flex; flex-direction: column; gap: 18px; }
+.p-field label {
+  display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.p-field input {
+  width: 100%; padding: 12px 16px; border-radius: var(--radius-md);
+  border: 1px solid var(--border); background: rgba(255,255,255,0.06);
+  color: var(--text-primary); font-size: 14px; outline: none;
+  transition: all 0.2s; font-family: 'Inter', sans-serif;
+}
+.p-field input:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--blue-glow); background: rgba(255,255,255,0.1); }
+.p-field input::placeholder { color: var(--text-muted); }
+
+/* Save button */
+.p-save-row { display: flex; gap: 10px; margin-top: 10px; }
+
+/* Message */
+.p-msg { font-weight: 600; font-size: 13px; margin-top: 10px; }
+
+/* Danger zone */
+.p-danger-zone {
+  margin-top: 40px; padding: 24px; border-radius: var(--radius-lg);
+  border: 1px solid rgba(239,68,68,0.25); background: rgba(239,68,68,0.05);
+}
+.p-danger-zone h3 { font-size: 15px; font-weight: 700; color: var(--error); margin-bottom: 8px; }
+.p-danger-zone p { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; }
+</style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="top-bar-left">
+    <img src="imagem.jpeg" class="logo-circle" alt="Logo">
+    <span>Mesa de Estudos</span>
+  </div>
+  <div class="top-bar-right">
+    <a href="dashboard.html" class="btn-bar">Desempenho</a>
+    <a href="filtrar.html" class="btn-bar">Questoes</a>
+    <a href="materiais.html" class="btn-bar">Materiais</a>
+  </div>
+</div>
+
+<div class="p-page">
+  <h1>Meu Perfil</h1>
+  <p class="subtitle">Gerencie suas informacoes pessoais e personalize sua conta.</p>
+
+  <!-- Avatar -->
+  <div class="p-avatar-section">
+    <div class="p-avatar" id="avatarDisplay"><span id="avatarLetter">?</span></div>
+    <div class="p-avatar-info">
+      <div class="name" id="displayName">Carregando...</div>
+      <div class="email" id="displayEmail">...</div>
+      <div class="p-avatar-btns">
+        <button class="p-btn-sm upload" id="btnUploadPhoto">Alterar foto</button>
+        <button class="p-btn-sm remove" id="btnRemovePhoto" style="display:none">Remover foto</button>
+        <input type="file" id="fileInput" accept="image/*">
+      </div>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <form class="p-form" id="profileForm">
+    <div class="p-field">
+      <label>Nome de exibicao</label>
+      <input type="text" id="inputDisplayName" placeholder="Seu nome">
+    </div>
+    <div class="p-field">
+      <label>Email</label>
+      <input type="email" id="inputEmail" disabled style="opacity:0.5;cursor:not-allowed;">
+    </div>
+    <div class="p-save-row">
+      <button type="submit" class="btn btn-primary">Salvar alteracoes</button>
+      <a href="dashboard.html" class="btn btn-secondary">Voltar</a>
+    </div>
+  </form>
+  <p class="p-msg" id="msg"></p>
+
+  <!-- Danger zone -->
+  <div class="p-danger-zone">
+    <h3>Zona de perigo</h3>
+    <p>Alterar sua senha ira desconectar voce de todos os dispositivos.</p>
+    <button class="btn btn-danger" id="btnChangePassword">Alterar senha</button>
+  </div>
+</div>
+
+<img src="imagem.jpeg" class="floating-logo" alt="Logo">
+
+<script>
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+const msg = document.getElementById('msg')
+let currentUserId = null
+let currentAvatarUrl = null
+
+// Auth guard
+(async () => {
+  const { data: { user } } = await supabaseClient.auth.getUser()
+  if (!user) { window.location.href = 'login.html'; return }
+  currentUserId = user.id
+  document.getElementById('inputEmail').value = user.email
+
+  // Load user data from users table
+  const { data: userData, error } = await supabaseClient
+    .from('users').select('display_name, avatar_url').eq('id', user.id).single()
+
+  if (userData) {
+    document.getElementById('inputDisplayName').value = userData.display_name || ''
+    document.getElementById('displayName').textContent = userData.display_name || user.email
+    document.getElementById('displayEmail').textContent = user.email
+    const letter = (userData.display_name || user.email).charAt(0).toUpperCase()
+    document.getElementById('avatarLetter').textContent = letter
+
+    if (userData.avatar_url) {
+      currentAvatarUrl = userData.avatar_url
+      document.getElementById('avatarDisplay').innerHTML = `<img src="${userData.avatar_url}" alt="Avatar">`
+      document.getElementById('btnRemovePhoto').style.display = 'inline-flex'
+    }
+  } else {
+    document.getElementById('displayName').textContent = user.email
+    document.getElementById('displayEmail').textContent = user.email
+    document.getElementById('avatarLetter').textContent = user.email.charAt(0).toUpperCase()
+  }
+})()
+
+// Save profile
+document.getElementById('profileForm').addEventListener('submit', async (e) => {
+  e.preventDefault()
+  msg.style.color = 'var(--warning)'
+  msg.textContent = 'Salvando...'
+
+  const displayName = document.getElementById('inputDisplayName').value.trim()
+
+  const { error } = await supabaseClient
+    .from('users')
+    .update({ display_name: displayName })
+    .eq('id', currentUserId)
+
+  if (error) {
+    msg.style.color = 'var(--error)'
+    msg.textContent = 'Erro ao salvar: ' + error.message
+    return
+  }
+
+  // Update display
+  document.getElementById('displayName').textContent = displayName || document.getElementById('inputEmail').value
+  const letter = (displayName || document.getElementById('inputEmail').value).charAt(0).toUpperCase()
+  const avatarEl = document.getElementById('avatarDisplay')
+  if (!currentAvatarUrl) {
+    document.getElementById('avatarLetter').textContent = letter
+  }
+
+  msg.style.color = 'var(--success)'
+  msg.textContent = 'Perfil salvo com sucesso!'
+})
+
+// Upload photo
+document.getElementById('btnUploadPhoto').addEventListener('click', () => {
+  document.getElementById('fileInput').click()
+})
+
+document.getElementById('fileInput').addEventListener('change', async (e) => {
+  const file = e.target.files[0]
+  if (!file) return
+
+  // Validate size (max 2MB)
+  if (file.size > 2 * 1024 * 1024) {
+    msg.style.color = 'var(--error)'
+    msg.textContent = 'Imagem muito grande. Maximo 2MB.'
+    return
+  }
+
+  msg.style.color = 'var(--warning)'
+  msg.textContent = 'Enviando foto...'
+
+  const fileExt = file.name.split('.').pop()
+  const filePath = `avatars/${currentUserId}.${fileExt}`
+
+  // Upload to Supabase Storage
+  const { error: uploadError } = await supabaseClient.storage
+    .from('avatars')
+    .upload(filePath, file, { upsert: true })
+
+  if (uploadError) {
+    msg.style.color = 'var(--error)'
+    msg.textContent = 'Erro ao enviar foto: ' + uploadError.message
+    return
+  }
+
+  // Get public URL
+  const { data: { publicUrl } } = supabaseClient.storage.from('avatars').getPublicUrl(filePath)
+
+  // Update users table
+  const { error: updateError } = await supabaseClient
+    .from('users').update({ avatar_url: publicUrl }).eq('id', currentUserId)
+
+  if (updateError) {
+    msg.style.color = 'var(--error)'
+    msg.textContent = 'Erro ao atualizar foto no perfil.'
+    return
+  }
+
+  currentAvatarUrl = publicUrl
+  document.getElementById('avatarDisplay').innerHTML = `<img src="${publicUrl}" alt="Avatar">`
+  document.getElementById('btnRemovePhoto').style.display = 'inline-flex'
+  msg.style.color = 'var(--success)'
+  msg.textContent = 'Foto atualizada!'
+})
+
+// Remove photo
+document.getElementById('btnRemovePhoto').addEventListener('click', async () => {
+  msg.style.color = 'var(--warning)'
+  msg.textContent = 'Removendo foto...'
+
+  const { error } = await supabaseClient
+    .from('users').update({ avatar_url: null }).eq('id', currentUserId)
+
+  if (error) {
+    msg.style.color = 'var(--error)'
+    msg.textContent = 'Erro ao remover foto.'
+    return
+  }
+
+  currentAvatarUrl = null
+  const displayName = document.getElementById('inputDisplayName').value.trim()
+  const letter = (displayName || document.getElementById('inputEmail').value).charAt(0).toUpperCase()
+  document.getElementById('avatarDisplay').innerHTML = `<span id="avatarLetter">${letter}</span>`
+  document.getElementById('btnRemovePhoto').style.display = 'none'
+  msg.style.color = 'var(--success)'
+  msg.textContent = 'Foto removida!'
+})
+
+// Change password
+document.getElementById('btnChangePassword').addEventListener('click', async () => {
+  const email = document.getElementById('inputEmail').value
+  msg.style.color = 'var(--warning)'
+  msg.textContent = 'Enviando email de redefinicao...'
+  const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/perfil.html'
+  })
+  if (error) {
+    msg.style.color = 'var(--error)'
+    msg.textContent = 'Erro ao enviar email.'
+  } else {
+    msg.style.color = 'var(--success)'
+    msg.textContent = 'Email de redefinicao enviado! Verifique sua caixa de entrada.'
+  }
+})
+</script>
+</body>
+</html>
